@@ -18,13 +18,17 @@ namespace RandomRPG.Entities
         public override void TakeDamage(float damage, bool waitToKill = false)
         {
             base.TakeDamage(damage, waitToKill);
-            if(!waitToKill) Program.KillDeadEnemies();
+            if(!waitToKill) Battle.KillDeadEnemies();
+        }
+        public override string HPStatus()
+        {
+            return base.HPStatus() + $" {dmg}";
         }
         public override void DoTurn()
         {
-            int pickedPlayer = RandomUtil.Next(0, Program.heros.Count);
-            Console.WriteLine($"{name} attacked {Program.heros[pickedPlayer].name} for {Program.heros[pickedPlayer].GetDamageDelt(dmg)}");
-            Program.heros[pickedPlayer].TakeDamage(dmg);
+            int pickedPlayer = RandomUtil.Next(0, RPG.heros.Count);
+            Console.WriteLine($"{name} attacked {RPG.heros[pickedPlayer].name} for {RPG.heros[pickedPlayer].GetDamageDelt(dmg)}");
+            RPG.heros[pickedPlayer].TakeDamage(dmg);
         }
 
         public virtual Enemy Clone()

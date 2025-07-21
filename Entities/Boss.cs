@@ -26,9 +26,9 @@ namespace RandomRPG.Entities
         {
             Console.WriteLine($"Prepare yourself, The Government sends {summon.name}.");
             summon.OnSpawn();
-            Program.enemies.Add(summon);
+            RPG.enemies.Add(summon);
             summon.PrintStatus();
-            Program.enemies[1].PrintStatus();
+            RPG.enemies[1].PrintStatus();
         }
         public override void DoTurn()
         {
@@ -45,16 +45,16 @@ namespace RandomRPG.Entities
             else if (turnNum == 3)
             {
                 Summon(summons[4]);
-                Summon(Program.possibleEasyEnemies[RandomUtil.Next(0, Program.possibleEasyEnemies.Length)]);
+                Summon(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)]);
             }
             else if (turnNum == 4)
             {
                 Summon(summons[5]);
-                Summon(Program.possibleEasyEnemies[RandomUtil.Next(0, Program.possibleEasyEnemies.Length)]);
+                Summon(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)]);
             }
             else
             {
-                Summon(Program.possibleMediumEnemies[RandomUtil.Next(0, Program.possibleMediumEnemies.Length)]);
+                Summon(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)]);
             }
             turnNum++;
         }

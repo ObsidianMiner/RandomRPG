@@ -1,0 +1,7 @@
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Release\RandomRPG.exe.config
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Release\RandomRPG.exe
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Release\RandomRPG.pdb
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Release\RandomRPG.csproj.AssemblyReference.cache
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Release\RandomRPG.csproj.CoreCompileInputs.cache
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Release\RandomRPG.exe
+C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Release\RandomRPG.pdb

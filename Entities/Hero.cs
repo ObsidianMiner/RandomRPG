@@ -39,7 +39,7 @@ namespace RandomRPG.Entities
         public override void TakeDamage(float damage, bool waitToKill = false)
         {
             base.TakeDamage(damage, waitToKill);
-            if (!waitToKill) Program.KillDeadPlayers();
+            if (!waitToKill) Battle.KillDeadPlayers();
         }
         public override void DoTurn()
         {
@@ -56,10 +56,17 @@ namespace RandomRPG.Entities
             {
                 Console.WriteLine($"{i}.{moves[i].name}");
             }
-            if (!int.TryParse(Console.ReadKey().KeyChar.ToString(), out int pickedMove)) return false;
+            Console.WriteLine("i.More Info");
+            string key = Console.ReadKey().KeyChar.ToString();
+            Console.WriteLine();
+            if (key == "i")
+            {
+                PrintHeroDescription();
+            }
+            if (!int.TryParse(key, out int pickedMove)) return false;
             if (pickedMove >= 0 && pickedMove < moves.Length)
             {
-                if (moves[pickedMove].hasTarget) return TryPickTarget(pickedMove, moves[pickedMove].heroTarget ? Program.heros.ToEntities() : Program.enemies.ToEntities());
+                if (moves[pickedMove].hasTarget) return TryPickTarget(pickedMove, moves[pickedMove].heroTarget ? RPG.heros.ToEntities() : RPG.enemies.ToEntities());
                 else return moves[pickedMove].DoMove(null);
             }
             return false;
@@ -85,10 +92,12 @@ namespace RandomRPG.Entities
         public void PrintHeroDescription()
         {
             Console.WriteLine($"{name}:");
+            Console.WriteLine($"Max HP {maxHP}");
             for (int i = 0; i < moves.Length; i++)
             {
                 Console.WriteLine($"{moves[i].name}: {moves[i].description}");
             }
+            Console.WriteLine();
         }
         public bool HasRecoveryMove()
         {

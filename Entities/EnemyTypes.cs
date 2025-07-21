@@ -16,23 +16,39 @@ namespace RandomRPG.Entities
         public override void DoTurn()
         {
             Console.WriteLine($"{name} is protecting all enemies for {defenceStrength}hp.");
-            for (int i = 0; i < Program.enemies.Count; i++)
+            for (int i = 0; i < RPG.enemies.Count; i++)
             {
-                Program.enemies[i].defence += defenceStrength;
+                RPG.enemies[i].defence += defenceStrength;
             }
         }
         public override void OnSpawn()
         {
             base.OnSpawn();
             Console.WriteLine($"{name} is protecting all enemies for {defenceStrength}hp.");
-            for (int i = 0; i < Program.enemies.Count; i++)
+            for (int i = 0; i < RPG.enemies.Count; i++)
             {
-                Program.enemies[i].defence += defenceStrength;
+                RPG.enemies[i].defence += defenceStrength;
             }
         }
         public override Enemy Clone()
         {
             return new DefendingEnemy(maxHP, name, dmg, defenceStrength);
+        }
+    }
+    public class AdvertisementEnemy : Enemy
+    {
+        bool hasAdvertised;
+        public AdvertisementEnemy(float hp, string name, float dmg) : base(hp, name, dmg)
+        {
+
+        }
+        public override void DoTurn()
+        {
+            base.DoTurn();
+            if(!hasAdvertised)
+            {
+                System.Diagnostics.Process.Start("https://noobyest.itch.io");
+            }
         }
     }
     public class RecoverableEnemy : Enemy
@@ -75,9 +91,9 @@ namespace RandomRPG.Entities
                         return;
                     }
                 }
-                for (int i = 0; i < Program.heros.Count; i++)
+                for (int i = 0; i < RPG.heros.Count; i++)
                 {
-                    Program.heros[i].TakeDamage(99);
+                    RPG.heros[i].TakeDamage(99);
                 }
             }
             else
@@ -113,11 +129,11 @@ namespace RandomRPG.Entities
         {
             for (int i = 0; i < enemyDrops.Length; i++)
             {
-                Program.enemies.Add(enemyDrops[i]);
+                RPG.enemies.Add(enemyDrops[i]);
                 enemyDrops[i].OnSpawn();
                 enemyDrops[i].stuned = true;
             }
-            Program.enemies.Remove(this);
+            RPG.enemies.Remove(this);
         }
         public override void OnSpawn()
         {
@@ -136,7 +152,7 @@ namespace RandomRPG.Entities
         }
         void Summon(Enemy summon)
         {
-            Program.enemies.Add(summon);
+            RPG.enemies.Add(summon);
             summon.OnSpawn();
             summon.PrintStatus();
         }
@@ -156,9 +172,9 @@ namespace RandomRPG.Entities
                     }
                 }
                 Hero zuckerbot = new Hero(35f, "Zuckerbot", new Move[] { new RecoveringMove("Sign Out"), new SacrificeMove("Self Destruct", 50f, 50f), new UselessMove("Take a Selfie") });
-                if (!Program.PlayerHasRecoveringMove())
+                if (!Battle.PlayerHasRecoveringMove())
                 {
-                    Program.heros.Add(zuckerbot);
+                    RPG.heros.Add(zuckerbot);
                     zuckerbot.OnSpawn();
                     Console.WriteLine("A malfunctioning zuckerbot joined your team!");
                 }
@@ -167,9 +183,9 @@ namespace RandomRPG.Entities
             if(turnNum == 1 || (turnNum % 5 == 0 && turnNum > 4))
             {
                 Console.WriteLine("Mark Defends his team!");
-                for (int i = 0; i < Program.enemies.Count; i++)
+                for (int i = 0; i < RPG.enemies.Count; i++)
                 {
-                    Program.enemies[i].defence += 3;
+                    RPG.enemies[i].defence += 3;
                 }
             }
             if(turnNum == 3)
@@ -224,11 +240,11 @@ namespace RandomRPG.Entities
         }
         public void ConvertHero()
         {
-            Hero heroToConvert = Program.heros[RandomUtil.Next(0, Program.heros.Count)];
-            if (Program.heros.Count > 5 && !heroToConvert.HasRecoveryMove())
+            Hero heroToConvert = RPG.heros[RandomUtil.Next(0, RPG.heros.Count)];
+            if (RPG.heros.Count > 5 && !heroToConvert.HasRecoveryMove())
             {
                 Summon(new RecoverableEnemy(heroToConvert.maxHP, heroToConvert.name + "!!🥽⌬", 12f, heroToConvert, true));
-                Program.heros.Remove(heroToConvert);
+                RPG.heros.Remove(heroToConvert);
                 Console.WriteLine($"{heroToConvert.name} was brainwashed by zuckerberg!");
             }
             else

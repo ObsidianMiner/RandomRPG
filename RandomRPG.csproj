@@ -7,11 +7,26 @@
     <ProjectGuid>{DC2F1896-3506-477D-99F1-2FC9255E3FC0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>RandomRPG</RootNamespace>
-    <AssemblyName>RandomRPG</AssemblyName>
+    <AssemblyName>RandomRPG V3</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>RandomRPG.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,21 +61,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Campaigns\MagicContent.cs" />
+    <Compile Include="Campaigns\MagicEvents.cs" />
+    <Compile Include="Entities\Battle.cs" />
     <Compile Include="Entities\EnemyTypes.cs" />
     <Compile Include="Entities\Boss.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Moves.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Entities\SpecialMoves.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Entities\Hero.cs" />
-    <Compile Include="MultiplierList.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Utilities\MultiplierList.cs" />
+    <Compile Include="RPG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random.cs" />
-    <Compile Include="TechContent.cs" />
+    <Compile Include="Campaigns\TechContent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RandomRPG.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

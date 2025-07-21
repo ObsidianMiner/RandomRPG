@@ -7,20 +7,19 @@ using RandomRPG.Entities;
 
 namespace RandomRPG
 {
-    public static class Program
+    public static class RPG
     {
         public static List<Hero> heros = new List<Hero>();
         public static List<Enemy> enemies = new List<Enemy>();
-        public static int windowWidth = 170;
+        public static int windowWidth = 115;
         public static int turnNum;
         public static int waveNum;
         public static int herosRecruited = 0;
         public static bool gameRunning = true;
         public static bool techCampaign = false;
+        public static bool magicCapaign = false;
         public static int recruitsTillBoss = 6;
-        static bool bossSpawned = false;
-        static bool cacheAccsessed = false;
-        public static bool voidCall = false;
+        public static bool bossSpawned = false;
         public static string[] possibleGenericHeroNames = new string[]
         {
             "TheeThyThoe",
@@ -71,14 +70,15 @@ namespace RandomRPG
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WindowWidth = windowWidth;
+            Console.SetWindowSize(4, 4);
+            Console.WindowHeight = 2;
             Console.WindowHeight++;
             Setup();
             while (gameRunning)
             {
                 waveNum++;
                 MainLoop();
-                if (heros.Count == 0)
+                if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp")))
                 {
                     gameRunning = false;
                     LoseGameMessage();
@@ -89,9 +89,8 @@ namespace RandomRPG
                     WinGameMessage();
                     break;
                 }
-                if (voidCall && TechContent.voidCallTurn >= 4) TechContent.Sacrifice();
                 else Camp();
-                GenerateEnemies();
+                Battle.GenerateEnemies();
             }
             WaitForUser();
         }
@@ -103,6 +102,7 @@ namespace RandomRPG
             while (!answered)
             {
                 ConsoleKey key = Console.ReadKey().Key;
+                Console.WriteLine();
                 if (key == ConsoleKey.Y)
                 {
                     answer = true;
@@ -115,38 +115,14 @@ namespace RandomRPG
                 }
                 else
                 {
-                    Console.WriteLine(question);
+                    Console.WriteLine(question + " (y/n)");
                 }
             }
             return answer;
         }
-        static void GenerateCache()
-        {
-            Console.WriteLine();
-            Console.WriteLine("A mysterious cache appears in front of you.");
-
-            if (GetUserYN("Do you want to approch it? (y/n)"))
-            {
-                cacheAccsessed = true;
-                enemies.Add(new Cache(100f, "Meta Cache", 0f, new Enemy[] {
-                            new RecoverableEnemy(55f, "Bilbert🥽", 0f,
-                                new Hero(55f, "Bilbert", new Move[]{ new SuperStunMove("Laugh")})),
-                            new RecoverableEnemy(25f, "Mac!!!🥽", 14f,
-                                new Hero(25f, "Mac", new Move[]{ new DefenceErrasingMove("BBQ Blaster", 5f), new HealMove("Eat Mac&Cheese", 20f, 1)},
-                                    new Hero(50f, "Mac & Cheese", new Move[]{ new HealMove("Eat Mac&Cheese", 20f, 4), new DefenceErrasingMove("Scolding Sticky Cheese", 9f)}))),
-                            new RecoverableEnemy(30f, "Table!!!!!!🥽", 90f,
-                                new Hero(30f, "Table", new Move[]{ new RandomMove("Break Reality"), new DefendMove("Table Shield", 2), new UselessMove("Table Flight")})),
-                            new Enemy(45f, "Cache Protector!!!", 17f)}));
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    enemies[i].OnSpawn();
-                }
-                return;
-            }
-        }
         public static void MainLoop()
         {
-            if (herosRecruited >= recruitsTillBoss && !voidCall)
+            if (herosRecruited >= recruitsTillBoss && !TechContent.voidCall)
             {
                 BossMessage();
                 bossSpawned = true;
@@ -167,9 +143,15 @@ namespace RandomRPG
             {
                 turnNum++;
                 Console.WriteLine($"Turn {turnNum}");
+                if (magicCapaign)
+                {
+                    MagicContent.lampOil--;
+                    if (MagicContent.lampOil < 0) return;
+                    Console.WriteLine($"💡{MagicContent.lampOil} lamp oil left...");
+                }
                 for (int i = 0; i < heros.Count; i++)
                 {
-                    PrintField();
+                    Battle.PrintField();
                     heros[i].TryTurn();
                     if (enemies.Count == 0) return;
                 }
@@ -187,97 +169,9 @@ namespace RandomRPG
                 {
                     heros[i].defence = 0;
                 }
-                if (heros.Count == 0) return;
+                if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp"))) return;
                 WaitForUser();
             }
-        }
-        public static void GenerateEnemies()
-        {
-            if (techCampaign)
-            {
-
-                if (turnNum < 18 && turnNum > 10 && RandomUtil.NextDouble() < 0.5f && PlayerHasRecoveringMove() && !cacheAccsessed)
-                {
-                    GenerateCache();
-                }
-                if (waveNum % 2 == 0)
-                {
-                    RecoverableEnemy enemy = TechContent.recoverableEnemies[RandomUtil.Next(0, TechContent.recoverableEnemies.Length)];
-                    if (!enemy.recoverableHero.recruited) enemies.Add(enemy);
-                }
-                if (turnNum >= 18 && RandomUtil.NextDouble() < 0.7f)
-                {
-                    Enemy[] miniBoss = TechContent.miniBossess[RandomUtil.Next(0, TechContent.miniBossess.Length)];
-                    for (int i = 0; i < miniBoss.Length; i++)
-                    {
-                        if(!(miniBoss[i] is RecoverableEnemy recoverableEnemy) || !recoverableEnemy.recoverableHero.recruited) enemies.Add(miniBoss[i].Clone());
-                    }
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        enemies[i].OnSpawn();
-                    }
-                    return;
-                }
-            }
-
-            enemies.Add(possibleEasyEnemies[RandomUtil.Next(0, possibleEasyEnemies.Length)].Clone());
-            enemies.Add(possibleMediumEnemies[RandomUtil.Next(0, possibleMediumEnemies.Length)].Clone());
-            if(RandomUtil.NextDouble() < 0.5f && turnNum > 6) enemies.Add(possibleMediumEnemies[RandomUtil.Next(0, possibleMediumEnemies.Length)].Clone());
-            if (RandomUtil.NextDouble() < 0.5f)
-            {
-                int swarmEnemyCount = (turnNum / 8) + 1;
-                if(turnNum > 20) enemies.Add(possibleHardEnemies[RandomUtil.Next(0, possibleHardEnemies.Length)].Clone());
-                for (int i = 0; i < swarmEnemyCount; i++)
-                {
-                    enemies.Add(possibleEasyEnemies[RandomUtil.Next(0, possibleEasyEnemies.Length)].Clone());
-                }
-            }
-            else
-            {
-                if (turnNum < (techCampaign ? 18 : 26) + RandomUtil.Next(-6, 10)) enemies.Add(possibleMediumEnemies[RandomUtil.Next(0, possibleMediumEnemies.Length)].Clone());
-                else if (turnNum < (techCampaign ? 20 : 30) + RandomUtil.Next(-6, 20)) enemies.Add(possibleHardEnemies[RandomUtil.Next(0, possibleHardEnemies.Length)].Clone());
-                else
-                {
-                    enemies.Add(possibleHardEnemies[RandomUtil.Next(0, possibleHardEnemies.Length)].Clone());
-                    enemies.Add(possibleHardEnemies[RandomUtil.Next(0, possibleHardEnemies.Length)].Clone());
-                }
-            }
-
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].OnSpawn();
-            }
-        }
-        public static bool PlayerHasRecoveringMove()
-        {
-            for (int i = 0; i < heros.Count; i++)
-            {
-                if (heros[i].HasRecoveryMove()) return true;
-            }
-            return false;
-        }
-        public static void KillDeadPlayers()
-        {
-            for (int i = 0; i < heros.Count; i++)
-            {
-                if(heros[i].hp <= 0)
-                {
-                    Console.WriteLine($"{heros[i].name} Died! Get Your Act Together!");
-                }
-            }
-            heros.RemoveAll(hero => hero.hp <= 0);
-        }
-        public static void KillDeadEnemies()
-        {
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                if (enemies[i].hp <= 0)
-                {
-                    if(enemies[i].hp < -4) Console.WriteLine($"You Obliterated {enemies[i].name}!");
-                    else Console.WriteLine($"You Killed {enemies[i].name}!");
-                }
-            }
-            enemies.RemoveAll(enemy => enemy.hp <= 0);
         }
         static void Setup()
         {
@@ -286,8 +180,11 @@ namespace RandomRPG
             Console.WriteLine("Press Any Key To Continue");
             char selectedCampaign = Console.ReadKey().KeyChar;
             if (selectedCampaign == 'v') techCampaign = true;
+            if (selectedCampaign == 'm') magicCapaign = true;
             Console.WriteLine("");
-            if (!techCampaign)
+            if (techCampaign) TechContent.SetupContent();
+            else if (magicCapaign) MagicContent.SetupContent();
+            else
             {
                 heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], Move.basicMoveset));
                 heros.Add(possibleHeros[RandomUtil.Next(0, possibleHeros.Length)]);
@@ -304,59 +201,15 @@ namespace RandomRPG
                     enemies[i].OnSpawn();
                 }
             }
-            else
-            {
-                TechContent.SetupTechContent();
-                heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], new Move[] { new DamageMove("Uppercut", 7f), new StunningMove("Slam", 4f, 0.5f)}));
-                heros.Add(possibleHeros[RandomUtil.Next(0, possibleHeros.Length)]);
-                for (int i = 0; i < heros.Count; i++)
-                {
-                    heros[i].OnSpawn();
-                    heros[i].PrintHeroDescription();
-                }
-                enemies.Add(new Enemy(14f, "Meta Officer!", 6f));
-                enemies.Add(new Enemy(7f, "Theif!!", 9f));
-                enemies.Add(new Enemy(12f, "Living Boomerang", 4f));
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    enemies[i].OnSpawn();
-                }
-            }
-        }
-        static void PrintField()
-        {
-            Console.WriteLine(new string('#', windowWidth));
-            PrintSide(heros.ToEntities());
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            PrintSide(enemies.ToEntities());
-            Console.WriteLine(new string('#', windowWidth));
-        }
-        static void PrintSide(List<Entity> side)
-        {
-            
-            int spacing = windowWidth / (side.Count + 1);
-            string[] names = new string[side.Count];
-            string[] status = new string[side.Count];
-            string[][] sideInfo = new string[][] { names, status };
-            for (int i = 0; i < side.Count; i++)
-            {
-                names[i] = side[i].name;
-                status[i] = side[i].HPStatus();
-            }
-            string[] rows = EvenColumns(spacing, sideInfo);
-            for (int i = 0; i < rows.Length; i++)
-            {
-                Console.WriteLine(rows[i].PadLeft(rows[i].Length + spacing));
-            }
-
-            Console.WriteLine();
         }
         static void Camp()
         {
             CampMessage();
+
+            int firstRecruit = FindNewRecruit(-1);
+            int secondRecruit = FindNewRecruit(firstRecruit);
+            int upgrade = FindUpgrade();
+
             bool gotAid = false;
             while (!gotAid)
             {
@@ -380,11 +233,19 @@ namespace RandomRPG
                         "TIP: Defending enemies (🛡 ) protect all other enemies!"
                     };
                 }
+                if(magicCapaign)
+                {
+                    tips = new string[]
+                    {
+                        "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
+                        "TIP: Don't let the lamp go out! You can get more lamp oil from events.",
+                        "TIP: Be ready for something to happen on turn 22!",
+                        "TIP: It's Tyler's fault."
+                    };
+                }    
                 Console.WriteLine(tips[Math.Min(waveNum - 1, tips.Length - 1)]);
                 Console.WriteLine("Recruits at camp:");
                 Console.WriteLine();
-                int firstRecruit = FindNewRecruit(-1);
-                int secondRecruit = FindNewRecruit(firstRecruit);
                 if (firstRecruit != -1)
                 {
                     Console.Write("0.");
@@ -399,7 +260,6 @@ namespace RandomRPG
                 }
 
 
-                int upgrade = FindUpgrade();
                 if (waveNum <= 3) Console.WriteLine("Upgrading Characters will be unlcoked at wave 4.");
                 else
                 {
@@ -434,6 +294,22 @@ namespace RandomRPG
             {
                 heros[i].Heal(10f);
             }
+        }
+        public static int HeroOption(Hero[] options)
+        {
+            int selected = -1;
+            while (selected == -1)
+            {
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.WriteLine($"{i}.{options[i].name}");
+                }
+                if(int.TryParse(Console.ReadKey().KeyChar.ToString(), out int sel))
+                {
+                    selected = sel;
+                }
+            }
+            return selected;
         }
         public static void RecruitHero(Hero hero)
         {
@@ -514,43 +390,6 @@ namespace RandomRPG
             Console.WriteLine(@"| |_  | | '_ \ / _` | | |  _ \ / _ \/ __/ __| |");
             Console.WriteLine(@"|  _| | | | | | (_| | | | |_) | (_) \__ \__ \_|");
             Console.WriteLine(@"|_|   |_|_| |_|\__,_|_| |____/ \___/|___/___(_)");
-        }
-        public static string[] EvenColumns(int desiredWidth, IEnumerable<IEnumerable<string>> lists)
-        {
-            return EvenColumns(desiredWidth, true, lists).ToArray();
-        }
-
-        public static IEnumerable<string> EvenColumns(int desiredWidth, bool rightOrLeft, IEnumerable<IEnumerable<string>> lists)
-        {
-            return lists.Select(o => EvenColumns(desiredWidth, rightOrLeft, o.ToArray()));
-        }
-
-        public static string EvenColumns(int desiredWidth, bool rightOrLeftAlignment, string[] list, bool fitToItems = false)
-        {
-            // right alignment needs "-X" 'width' vs left alignment which is just "X" in the `string.Format` format string
-            int columnWidth = (rightOrLeftAlignment ? -1 : 1) *
-                                // fit to actual items? this could screw up "evenness" if
-                                // one column is longer than the others
-                                // and you use this with multiple rows
-                                (fitToItems
-                                    ? Math.Max(desiredWidth, list.Select(o => o.Length).Max())
-                                    : desiredWidth
-                                );
-
-            // make columns for all but the "last" (or first) one
-            string format = string.Concat(Enumerable.Range(rightOrLeftAlignment ? 0 : 1, list.Length - 1).Select(i => string.Format("{{{0},{1}}}", i, columnWidth)));
-
-            // then add the "last" one without Alignment
-            if (rightOrLeftAlignment)
-            {
-                format += "{" + (list.Length - 1) + "}";
-            }
-            else
-            {
-                format = "{0}" + format;
-            }
-
-            return string.Format(format, list);
         }
     }
 }

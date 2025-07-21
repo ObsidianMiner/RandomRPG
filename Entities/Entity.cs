@@ -10,7 +10,7 @@ namespace RandomRPG.Entities
     {
         public float maxHP;
         public float hp { get; protected set; }
-        public string name { get; protected set; }
+        public string name { get; set; }
         public float defence = 0;
         public bool stuned;
         public bool stunImmune;
@@ -41,6 +41,10 @@ namespace RandomRPG.Entities
         public virtual void DoTurn()
         {
 
+        }
+        public void SetHP(float newHP)
+        {
+            hp = newHP;
         }
         public virtual void TryTurn()
         {

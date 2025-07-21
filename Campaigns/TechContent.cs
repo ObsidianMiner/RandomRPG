@@ -10,6 +10,8 @@ namespace RandomRPG
     public static class TechContent
     {
         public static int voidCallTurn = 0;
+        public static bool cacheAccsessed = false;
+        public static bool voidCall = false;
         public static string[] possibleGenericHeroNames = new string[]
         {
             "Yellow Lantern",
@@ -103,17 +105,62 @@ namespace RandomRPG
                 new Enemy(30f, "Cultist!", 9f)
             }
         };
-        public static void SetupTechContent()
+        public static void SetupContent()
         {
             TechCampaignStartMessage();
-            Program.possibleGenericHeroNames = possibleGenericHeroNames;
-            Program.possibleHeros = possibleHeros;
-            Program.possibleEasyEnemies = possibleEasyEnemies;
-            Program.possibleMediumEnemies = possibleMediumEnemies;
-            Program.possibleHardEnemies = possibleHardEnemies;
-            Program.recruitsTillBoss += 2;
-            Program.voidCall = false;
+            RPG.possibleGenericHeroNames = possibleGenericHeroNames;
+            RPG.possibleHeros = possibleHeros;
+            RPG.possibleEasyEnemies = possibleEasyEnemies;
+            RPG.possibleMediumEnemies = possibleMediumEnemies;
+            RPG.possibleHardEnemies = possibleHardEnemies;
+            RPG.recruitsTillBoss += 2;
+            voidCall = false;
+            RPG.heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], new Move[] { new DamageMove("Uppercut", 7f), new StunningMove("Slam", 4f, 0.5f) }));
+            RPG.heros.Add(possibleHeros[RandomUtil.Next(0, possibleHeros.Length)]);
+            for (int i = 0; i < RPG.heros.Count; i++)
+            {
+                RPG.heros[i].OnSpawn();
+                RPG.heros[i].PrintHeroDescription();
+            }
+            RPG.enemies.Add(new Enemy(14f, "Meta Officer!", 6f));
+            RPG.enemies.Add(new Enemy(7f, "Theif!!", 9f));
+            RPG.enemies.Add(new Enemy(12f, "Living Boomerang", 4f));
+            for (int i = 0; i < RPG.enemies.Count; i++)
+            {
+                RPG.enemies[i].OnSpawn();
+            }
             //if (RandomUtil.Next(0, 4) == 0) Program.voidCall = true;
+        }
+        public static void Events()
+        {
+            if (RPG.turnNum < 18 && RPG.turnNum > 10 && RandomUtil.NextDouble() < 0.5f && Battle.PlayerHasRecoveringMove() && !cacheAccsessed)
+            {
+                GenerateCache();
+            }
+        }
+        public static void GenerateCache()
+        {
+            Console.WriteLine();
+            Console.WriteLine("A mysterious cache appears in front of you.");
+
+            if (RPG.GetUserYN("Do you want to approch it? (y/n)"))
+            {
+                cacheAccsessed = true;
+                RPG.enemies.Add(new Cache(100f, "Meta Cache", 0f, new Enemy[] {
+                            new RecoverableEnemy(55f, "Bilbert🥽", 0f,
+                                new Hero(55f, "Bilbert", new Move[]{ new SuperStunMove("Laugh")})),
+                            new RecoverableEnemy(25f, "Mac!!!🥽", 14f,
+                                new Hero(25f, "Mac", new Move[]{ new DefenceErrasingMove("BBQ Blaster", 5f), new HealMove("Eat Mac&Cheese", 20f, 1)},
+                                    new Hero(50f, "Mac & Cheese", new Move[]{ new HealMove("Eat Mac&Cheese", 20f, 4), new DefenceErrasingMove("Scolding Sticky Cheese", 9f)}))),
+                            new RecoverableEnemy(30f, "Table!!!!!!🥽", 90f,
+                                new Hero(30f, "Table", new Move[]{ new RandomMove("Break Reality"), new DefendMove("Table Shield", 2), new UselessMove("Table Flight")})),
+                            new Enemy(45f, "Cache Protector!!!", 17f)}));
+                for (int i = 0; i < RPG.enemies.Count; i++)
+                {
+                    RPG.enemies[i].OnSpawn();
+                }
+                return;
+            }
         }
         public static bool VoidCallUpdate()
         {
@@ -125,7 +172,7 @@ namespace RandomRPG
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
                     Console.WriteLine("A rumble can be felt in the distance, something is off.");
-                    Program.WaitForUser();
+                    RPG.WaitForUser();
                     break;
                 case 2:
                     System.Threading.Thread.Sleep(1000);
@@ -133,33 +180,49 @@ namespace RandomRPG
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
                     Console.WriteLine("A strange rumble can be felt in the distance, something is o̸̠̐̂f̷̢́f̵̜͠.");
-                    Program.WaitForUser();
+                    RPG.WaitForUser();
                     break;
                 case 3:
                     System.Threading.Thread.Sleep(1000);
                     Console.WriteLine();
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
-                    if(Program.GetUserYN("W̵͔̽o̶̢͂ư̸̯l̵̠̅d̷̯̅ ̷͉͗y̶̤͗ô̵̯ṵ̴̆ ̷̛̤l̵̦̎ī̴̼k̸̛̹e̴̘͑ ̸̢̒a̵̮͐ ̵̤̒d̶̰͋e̶͈͝a̴̯͊l̶̩̓?̵̪̋ ̸̱̀(̷͉̋ẙ̴ͅ/̵̭̑n̵͎͘)̶͎͗"))
+                    if(RPG.GetUserYN("W̵͔̽o̶̢͂ư̸̯l̵̠̅d̷̯̅ ̷͉͗y̶̤͗ô̵̯ṵ̴̆ ̷̛̤l̵̦̎ī̴̼k̸̛̹e̴̘͑ ̸̢̒a̵̮͐ ̵̤̒d̶̰͋e̶͈͝a̴̯͊l̶̩̓?̵̪̋ ̸̱̀(̷͉̋ẙ̴ͅ/̵̭̑n̵͎͘)̶͎͗"))
                     {
                         System.Threading.Thread.Sleep(1000);
                         Console.WriteLine();
                         Console.WriteLine("...");
                         System.Threading.Thread.Sleep(2000);
-                        if (Program.GetUserYN("D̵̠̑ȏ̸͓ ̴̪̆ÿ̵̠́ő̵̘ũ̴̞ ̵̰̆à̵̼ḡ̷̞ŕ̵͚é̴ͅe̸͇̕ ̸̪͋t̷̟̅o̷̫͠ ̷̟͋s̸̪͠é̸͍r̸͎̒v̷̨̀é̷̢?̷̗̾ ̷̠͠(̶͉͘ÿ̵̞/̵̧̐n̵͌ͅ)̵̼͑"))
+                        if (RPG.GetUserYN("D̵̠̑ȏ̸͓ ̴̪̆ÿ̵̠́ő̵̘ũ̴̞ ̵̰̆à̵̼ḡ̷̞ŕ̵͚é̴ͅe̸͇̕ ̸̪͋t̷̟̅o̷̫͠ ̷̟͋s̸̪͠é̸͍r̸͎̒v̷̨̀é̷̢?̷̗̾ ̷̠͠(̶͉͘ÿ̵̞/̵̧̐n̵͌ͅ)̵̼͑"))
                         {
                             Hero voidServent = new Hero(120f, "Void Servent", new Move[]{ new CorruptMove("Convert Hero", true), new CorruptMove("Convert Enemy", false)});
-                            Program.RecruitHero(voidServent);
+                            RPG.RecruitHero(voidServent);
                         }
-                        else Program.voidCall = false;
+                        else voidCall = false;
                     }
-                    else Program.voidCall = false;
+                    else voidCall = false;
                     break;
                 default:
                     break;
             }
             voidCallTurn++;
             return false;
+        }
+        public static void GenerateEnemies()
+        {
+            Battle.skipDefaultGenerating = true;
+            if (RPG.waveNum % 2 == 0)
+            {
+                RecoverableEnemy enemy = TechContent.recoverableEnemies[RandomUtil.Next(0, TechContent.recoverableEnemies.Length)];
+                if (!enemy.recoverableHero.recruited) RPG.enemies.Add(enemy);
+            }
+            if (RPG.turnNum >= 18 && RandomUtil.NextDouble() < 0.7f)
+            {
+                Battle.SpawnRandomEncounter(miniBossess);
+                return;
+            }
+
+            Battle.skipDefaultGenerating = false;
         }
         static void TechCampaignStartMessage()
         {
