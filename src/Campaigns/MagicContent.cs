@@ -21,7 +21,7 @@ namespace RandomRPG
             new Hero(25f, "The Mugger", new Move[]{ new ConvertMove("Mug"), new UselessMove("Smug")}),
             new Hero(26f, "Batman", new Move[]{new DamageMove("Batarang", 5f), new StunningMove("Crash Batmobile into", 0f, 0.5f)}),
             new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung Others", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999)}),
-            new Hero(20f, "Task Manager", new Move[]{ }),
+            new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 30f)}),
             new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SacrificeMove("Ice Ray", 15f, 15f)})
         };
         public static Enemy[] possibleEasyEnemies = new Enemy[]
@@ -43,10 +43,6 @@ namespace RandomRPG
             new Enemy(21f, "Hank Hill", 8f),
             new Enemy(13f, "Woody", 9f),
             new Enemy(11f, "Paralysis Demon", 14f)
-        };
-        public static RecoverableEnemy[] recoverableEnemies = new RecoverableEnemy[]
-        {
-
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
@@ -123,12 +119,15 @@ namespace RandomRPG
 
             RPG.recruitsTillBoss += 2;
             Console.WriteLine(new string('#', RPG.windowWidth));
+            Console.WriteLine("Select a starting hero...");
             for (int i = 0; i < startingHeros.Length; i++)
             {
                 startingHeros[i].PrintHeroDescription();
             }
             RPG.heros.Add(startingHeros[RPG.HeroOption(startingHeros)]);
             RPG.heros.Add(new Hero(30f, "The Lamp", new Move[] { new DamageMove("Smack", 6f) }));
+            Console.WriteLine("The darkness is encroching in, whispering all around you...");
+            Console.WriteLine("Keep the latern alive, and don't let it run out of oil!");
             Console.WriteLine(new string('#', RPG.windowWidth));
             for (int i = 0; i < RPG.heros.Count; i++)
             {
@@ -154,6 +153,7 @@ namespace RandomRPG
             Console.WriteLine(@"    | |  | | | |  __/ | |__| | (_| | |  |   < _ _ _ ");
             Console.WriteLine(@"    |_|  |_| |_|\___| |_____/ \__,_|_|  |_|\_(_|_|_)");
             Console.WriteLine("All you hear is howling wind...");
+            Console.WriteLine();
         }
     }
 }

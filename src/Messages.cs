@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace RandomRPG
+﻿namespace RandomRPG
 {
     public static class Messages
     {
+        public static void ColoredWriteLine(string message, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
         public static void StartGameMessage()
         {
             Console.WriteLine(@" ____             _             _                            ___ ");

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RandomRPG.Entities;
+﻿using RandomRPG.Entities;
 
 namespace RandomRPG
 {
@@ -28,5 +23,4 @@ namespace RandomRPG
             return entities;
         }
     }
-
 }

@@ -1,7 +1,4 @@
 ﻿using RandomRPG.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RandomRPG
 {
@@ -93,7 +90,7 @@ namespace RandomRPG
             while (turnNum < 1000)
             {
                 turnNum++;
-                Console.WriteLine($"Turn {turnNum}");
+                Messages.ColoredWriteLine($"Turn {turnNum}", ConsoleColor.Yellow);
                 if (magicCapaign)
                 {
                     MagicContent.lampOil--;
@@ -225,6 +222,7 @@ namespace RandomRPG
                 {
                     selected = sel;
                 }
+                Console.WriteLine();
             }
             return selected;
         }
