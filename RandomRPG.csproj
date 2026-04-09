@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Campaigns\MagicContent.cs" />
     <Compile Include="Campaigns\MagicEvents.cs" />
+    <Compile Include="Campaigns\StartingContent.cs" />
     <Compile Include="Entities\Battle.cs" />
     <Compile Include="Entities\EnemyTypes.cs" />
     <Compile Include="Entities\Boss.cs" />
@@ -70,12 +71,13 @@
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Moves.cs" />
     <Compile Include="Entities\SpecialMoves.cs" />
+    <Compile Include="Messages.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Entities\Hero.cs" />
     <Compile Include="Utilities\MultiplierList.cs" />
     <Compile Include="RPG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Random.cs" />
+    <Compile Include="Utilities\Random.cs" />
     <Compile Include="Campaigns\TechContent.cs" />
   </ItemGroup>
   <ItemGroup>

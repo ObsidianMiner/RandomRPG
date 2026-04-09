@@ -2,10 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace RandomRPG.Entities
@@ -53,7 +49,7 @@ namespace RandomRPG.Entities
         {
             for (int i = 0; i < enemies.Length; i++)
             {
-                if (!(enemies[i] is RecoverableEnemy recoverableEnemy) || !recoverableEnemy.recoverableHero.recruited) RPG.enemies.Add(miniBoss[i].Clone());
+                if (!(enemies[i] is RecoverableEnemy recoverableEnemy) || !recoverableEnemy.recoverableHero.recruited) RPG.enemies.Add(enemies[i].Clone());
             }
             for (int i = 0; i < RPG.enemies.Count; i++)
             {
@@ -67,9 +63,9 @@ namespace RandomRPG.Entities
             if (RPG.techCampaign)
             {
                 TechContent.Events();
-                if(!skipDefaultGenerating) TechContent.GenerateEnemies();
+                if (!skipDefaultGenerating) TechContent.GenerateEnemies();
             }
-            if(RPG.magicCapaign)
+            if (RPG.magicCapaign)
             {
                 MagicEvents.Events();
                 if (!skipDefaultGenerating) MagicContent.GenerateEnemies();
@@ -101,7 +97,7 @@ namespace RandomRPG.Entities
                 }
             }
 
-            
+
             InitBattle();
         }
         public static void InitBattle()

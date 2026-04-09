@@ -1,9 +1,7 @@
-﻿using System;
+﻿using RandomRPG.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RandomRPG.Entities;
 
 namespace RandomRPG
 {
@@ -28,103 +26,54 @@ namespace RandomRPG
             "Rodrick",
             "Man Of Pringlesvile"
         };
-        public static Hero[] possibleHeros = new Hero[]
-        {
-            new Hero(20f, "Callie", new Move[]{new DamageMove("Scratch", 5f), new WeakenMove("Meow")},
-                new Hero(75f, "Mecha-Callie", new Move[] { new DamageMove("Missiles", 8f), new WeakenMove("Meow"), new AllTargetsDamage("TailSwipe", 3f) })),
-            new Hero(75f, "Pringle Man", new Move[]{new UselessMove("Eat Pringles")}),
-            new Hero(20f, "Fruit Ninja", new Move[]{new AllTargetsDamage("Slice", 3f)},
-                new Hero(40f, "Soda Samari", new Move[]{ new AllTargetsDamage("Ultra Gamer Attack", 5f), new HealMove("Healing Dew", 20f, 3)})),
-            new Hero(20f, "Trunker", new Move[]{new DamageMove("Hacksaw", 6f), new AllTargetsDamage("Shotgun", 3f)}),
-            new Hero(32f, "Baby Shark", new Move[]{new UselessMove("Cry")}),
-            new Hero(25f, "Bowl Of Soup", new Move[]{new HealMove("Healing Soup", 12f, 6), new DamageMove("Burn", 3f)},
-                new Hero(50f, "Hot Chili", new Move[]{new HealMove("Healing Soup", 25f, 6), new DamageMove("Bean Blast", 8f), new WeakenMove("Enflame")})),
-            new Hero(28f, "Fruit Punch", new Move[]{new DamageMove("Punch", 7f)}),
-            new Hero(30f, "Minecraft Dog", new Move[]{new DamageMove("Bite", 7f), new HealMove("Feed Rotten Flesh", 5f, 64)},
-                new Hero(60f, "Dog's Ghost", new Move[]{new WeakenMove("Haunt"), new DefendMove("Bestow Luck", 4f)})),
-            new Hero(20f, "Steve", new Move[]{new DamageMove("Punch", 5f)})
-        };
-        public static Enemy[] possibleEasyEnemies = new Enemy[]
-        {
-            new Enemy(8f, "Migget", 3f),
-            new Enemy(5f, "Red Pepper!", 6f),
-            new Enemy(5f, "Green Pepper!", 6f),
-            new Enemy(2f, "Cockroach", 3f),
-            new Enemy(1f, "Earth Worm", 2f),
-            new Enemy(6f, "Bacon", 2f),
-            new Enemy(10f, "Flying Pizza", 3f)
-        };
-        public static Enemy[] possibleMediumEnemies = new Enemy[]
-        {
-            new Enemy(19f, "Ferrari!!", 10f),
-            new Enemy(15f, "Archer #394!", 11f),
-            new Enemy(30f, "The Wall", 0.5f),
-            new Enemy(17f, "Snake!!", 14f),
-            new Enemy(18f, "Asian Parents!!", 13f)
-        };
-        public static Enemy[] possibleHardEnemies = new Enemy[]
-        {
-            new Enemy(36f, "Uncle Sam!!!", 16f),
-            new Enemy(44f, "Astro Guardian!!", 13f)
-        };
-        static void Main(string[] args)
+
+        //Loaded Content
+        public static Hero[] possibleHeros = new Hero[] { };
+        public static Enemy[] possibleEasyEnemies = new Enemy[] { };
+        public static Enemy[] possibleMediumEnemies = new Enemy[] { };
+        public static Enemy[] possibleHardEnemies = new Enemy[] { };
+
+        static void SetupWindow()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.SetWindowSize(4, 4);
             Console.WindowHeight = 2;
             Console.WindowHeight++;
-            Setup();
+        }
+
+        static void Main(string[] args)
+        {
+            SetupWindow();
+            BeginJourneyScreen();
+            MainLoop();
+            WaitForUser();
+        }
+        public static void MainLoop()
+        {
             while (gameRunning)
             {
                 waveNum++;
-                MainLoop();
+                BattleLoop();
                 if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp")))
                 {
                     gameRunning = false;
-                    LoseGameMessage();
+                    Messages.LoseGameMessage();
                     break;
                 }
                 if (herosRecruited >= recruitsTillBoss && bossSpawned)
                 {
-                    WinGameMessage();
+                    Messages.WinGameMessage();
                     break;
                 }
                 else Camp();
                 Battle.GenerateEnemies();
             }
-            WaitForUser();
         }
-        public static bool GetUserYN(string question)
-        {
-            Console.WriteLine(question);
-            bool answered = false;
-            bool answer = false;
-            while (!answered)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                Console.WriteLine();
-                if (key == ConsoleKey.Y)
-                {
-                    answer = true;
-                    answered = true;
-                }
-                else if (key == ConsoleKey.N)
-                {
-                    answer = false;
-                    answered = true;
-                }
-                else
-                {
-                    Console.WriteLine(question + " (y/n)");
-                }
-            }
-            return answer;
-        }
-        public static void MainLoop()
+        public static void BattleLoop()
         {
             if (herosRecruited >= recruitsTillBoss && !TechContent.voidCall)
             {
-                BossMessage();
+                Messages.BossMessage();
                 bossSpawned = true;
                 if (techCampaign)
                 {
@@ -173,38 +122,31 @@ namespace RandomRPG
                 WaitForUser();
             }
         }
-        static void Setup()
+        static void BeginJourneyScreen()
         {
-            StartGameMessage();
+            Messages.StartGameMessage();
 
             Console.WriteLine("Press Any Key To Continue");
             char selectedCampaign = Console.ReadKey().KeyChar;
-            if (selectedCampaign == 'v') techCampaign = true;
-            if (selectedCampaign == 'm') magicCapaign = true;
-            Console.WriteLine("");
-            if (techCampaign) TechContent.SetupContent();
-            else if (magicCapaign) MagicContent.SetupContent();
-            else
+
+            switch (selectedCampaign)
             {
-                heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], Move.basicMoveset));
-                heros.Add(possibleHeros[RandomUtil.Next(0, possibleHeros.Length)]);
-                for (int i = 0; i < heros.Count; i++)
-                {
-                    heros[i].OnSpawn();
-                    heros[i].PrintHeroDescription();
-                }
-                enemies.Add(new Enemy(2f, "LittleBadGuy", 3f));
-                enemies.Add(new Enemy(20f, "BigBadGuy!", 6f));
-                enemies.Add(new Enemy(8f, "Theif!!", 9f));
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    enemies[i].OnSpawn();
-                }
+                case 'v':
+                    techCampaign = true;
+                    TechContent.SetupContent();
+                    break;
+                case 'm':
+                    magicCapaign = true;
+                    MagicContent.SetupContent();
+                    break;
+                default:
+                    StartingContent.Setup();
+                    break;
             }
         }
         static void Camp()
         {
-            CampMessage();
+            Messages.CampMessage();
 
             int firstRecruit = FindNewRecruit(-1);
             int secondRecruit = FindNewRecruit(firstRecruit);
@@ -233,7 +175,7 @@ namespace RandomRPG
                         "TIP: Defending enemies (🛡 ) protect all other enemies!"
                     };
                 }
-                if(magicCapaign)
+                if (magicCapaign)
                 {
                     tips = new string[]
                     {
@@ -242,7 +184,7 @@ namespace RandomRPG
                         "TIP: Be ready for something to happen on turn 22!",
                         "TIP: It's Tyler's fault."
                     };
-                }    
+                }
                 Console.WriteLine(tips[Math.Min(waveNum - 1, tips.Length - 1)]);
                 Console.WriteLine("Recruits at camp:");
                 Console.WriteLine();
@@ -263,7 +205,7 @@ namespace RandomRPG
                 if (waveNum <= 3) Console.WriteLine("Upgrading Characters will be unlcoked at wave 4.");
                 else
                 {
-                    if(upgrade != -1)
+                    if (upgrade != -1)
                     {
                         Console.WriteLine("Upgrade of the day:");
                         Console.WriteLine($"Upgrade {heros[upgrade].name} to");
@@ -295,6 +237,33 @@ namespace RandomRPG
                 heros[i].Heal(10f);
             }
         }
+
+        public static bool GetUserYN(string question)
+        {
+            Console.WriteLine(question);
+            bool answered = false;
+            bool answer = false;
+            while (!answered)
+            {
+                ConsoleKey key = Console.ReadKey().Key;
+                Console.WriteLine();
+                if (key == ConsoleKey.Y)
+                {
+                    answer = true;
+                    answered = true;
+                }
+                else if (key == ConsoleKey.N)
+                {
+                    answer = false;
+                    answered = true;
+                }
+                else
+                {
+                    Console.WriteLine(question + " (y/n)");
+                }
+            }
+            return answer;
+        }
         public static int HeroOption(Hero[] options)
         {
             int selected = -1;
@@ -304,7 +273,7 @@ namespace RandomRPG
                 {
                     Console.WriteLine($"{i}.{options[i].name}");
                 }
-                if(int.TryParse(Console.ReadKey().KeyChar.ToString(), out int sel))
+                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int sel))
                 {
                     selected = sel;
                 }
@@ -324,7 +293,7 @@ namespace RandomRPG
             {
                 attempts++;
                 int recruit = RandomUtil.Next(0, possibleHeros.Length);
-                if(!possibleHeros[recruit].recruited && recruit != alreadyInSelection) return recruit;
+                if (!possibleHeros[recruit].recruited && recruit != alreadyInSelection) return recruit;
             }
             return -1;
         }
@@ -345,51 +314,6 @@ namespace RandomRPG
             Console.ReadKey();
             Console.WriteLine("");
         }
-        static void StartGameMessage()
-        {
 
-            Console.WriteLine(@" ____             _             _                            ___ ");
-            Console.WriteLine(@"| __ )  ___  __ _(_)_ __       | | ___  _ __ _ __   ___ _   |__ \");
-            Console.WriteLine(@"|  _ \ / _ \/ _` | | '_ \   _  | |/ _ \| '__| '_ \ / _ \ | | |/ /");
-            Console.WriteLine(@"| |_) |  __/ (_| | | | | | | |_| | (_) | |  | | | |  __/ |_| |_|");
-            Console.WriteLine(@"|____/ \___|\__, |_|_| |_|  \___/ \___/|_|  |_| |_|\___|\__, (_) ");
-            Console.WriteLine(@"            |___/                                       |___/    ");
-        }
-        static void LoseGameMessage()
-        {
-            Console.WriteLine(@" ____  _    _ _ _      ___                    ");
-            Console.WriteLine(@"/ ___|| | _(_) | |    |_ _|___ ___ _   _  ___ ");
-            Console.WriteLine(@"\___ \| |/ / | | |     | |/ __/ __| | | |/ _ \");
-            Console.WriteLine(@" ___) |   <| | | |     | |\__ \__ \ |_| |  __/");
-            Console.WriteLine(@"|____/|_|\_\_|_|_|    |___|___/___/\__,_|\___|");
-        }
-        public static void WinGameMessage()
-        {
-            Console.WriteLine(@"__        ___                       _ _ ");
-            Console.WriteLine(@"\ \      / (_)_ __  _ __   ___ _ __| | |");
-            Console.WriteLine(@" \ \ /\ / /| | '_ \| '_ \ / _ \ '__| | |");
-            Console.WriteLine(@"  \ V  V / | | | | | | | |  __/ |  |_|_|");
-            Console.WriteLine(@"   \_/\_/  |_|_| |_|_| |_|\___|_|  (_|_)");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine(@"A new challenger approches! Press V at the start for a new campagin!");
-        }
-        public static void CampMessage()
-        {
-            Console.WriteLine(@"  ____                      ");
-            Console.WriteLine(@" / ___|__ _ _ __ ___  _ __  ");
-            Console.WriteLine(@"| |   / _` | '_ ` _ \| '_ \ ");
-            Console.WriteLine(@"| |__| (_| | | | | | | |_) |");
-            Console.WriteLine(@" \____\__,_|_| |_| |_| .__/ ");
-            Console.WriteLine(@"                     |_|    ");
-        }
-        public static void BossMessage()
-        {
-            Console.WriteLine(@" _____ _             _   ____                _ ");
-            Console.WriteLine(@"|  ___(_)_ __   __ _| | | __ )  ___  ___ ___| |");
-            Console.WriteLine(@"| |_  | | '_ \ / _` | | |  _ \ / _ \/ __/ __| |");
-            Console.WriteLine(@"|  _| | | | | | (_| | | | |_) | (_) \__ \__ \_|");
-            Console.WriteLine(@"|_|   |_|_| |_|\__,_|_| |____/ \___/|___/___(_)");
-        }
     }
 }
