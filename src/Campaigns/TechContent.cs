@@ -1,9 +1,5 @@
 ﻿using RandomRPG.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomRPG
 {
@@ -105,6 +101,17 @@ namespace RandomRPG
                 new Enemy(30f, "Cultist!", 9f)
             }
         };
+
+        public static string[] tips =
+        {
+            "TIP: VR(🥽 ) enemies can be recovered with special moves.",
+            "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
+            "TIP: After turn 18, VERY POWERFULL MINIBOSSES can occur! Watch out, and be prepared!",
+            "TIP: Heros recover 10hp after every battle.",
+            "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
+            "TIP: Defending enemies (🛡 ) protect all other enemies!"
+        };
+
         public static void SetupContent()
         {
             TechCampaignStartMessage();
@@ -113,6 +120,8 @@ namespace RandomRPG
             RPG.possibleEasyEnemies = possibleEasyEnemies;
             RPG.possibleMediumEnemies = possibleMediumEnemies;
             RPG.possibleHardEnemies = possibleHardEnemies;
+            RPG.tips = tips;
+
             RPG.recruitsTillBoss += 2;
             voidCall = false;
             RPG.heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], new Move[] { new DamageMove("Uppercut", 7f), new StunningMove("Slam", 4f, 0.5f) }));
@@ -143,7 +152,7 @@ namespace RandomRPG
             Console.WriteLine();
             Console.WriteLine("A mysterious cache appears in front of you.");
 
-            if (RPG.GetUserYN("Do you want to approch it? (y/n)"))
+            if (Input.GetUserYN("Do you want to approch it? (y/n)"))
             {
                 cacheAccsessed = true;
                 RPG.enemies.Add(new Cache(100f, "Meta Cache", 0f, new Enemy[] {
@@ -162,6 +171,10 @@ namespace RandomRPG
                 return;
             }
         }
+        /// <summary>
+        /// Unused part of the Tech Campaign for a secret boss
+        /// </summary>
+        /// <returns></returns>
         public static bool VoidCallUpdate()
         {
             switch (voidCallTurn)
@@ -172,7 +185,7 @@ namespace RandomRPG
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
                     Console.WriteLine("A rumble can be felt in the distance, something is off.");
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                     break;
                 case 2:
                     System.Threading.Thread.Sleep(1000);
@@ -180,22 +193,22 @@ namespace RandomRPG
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
                     Console.WriteLine("A strange rumble can be felt in the distance, something is o̸̠̐̂f̷̢́f̵̜͠.");
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                     break;
                 case 3:
                     System.Threading.Thread.Sleep(1000);
                     Console.WriteLine();
                     Console.WriteLine("...");
                     System.Threading.Thread.Sleep(2000);
-                    if(RPG.GetUserYN("W̵͔̽o̶̢͂ư̸̯l̵̠̅d̷̯̅ ̷͉͗y̶̤͗ô̵̯ṵ̴̆ ̷̛̤l̵̦̎ī̴̼k̸̛̹e̴̘͑ ̸̢̒a̵̮͐ ̵̤̒d̶̰͋e̶͈͝a̴̯͊l̶̩̓?̵̪̋ ̸̱̀(̷͉̋ẙ̴ͅ/̵̭̑n̵͎͘)̶͎͗"))
+                    if (Input.GetUserYN("W̵͔̽o̶̢͂ư̸̯l̵̠̅d̷̯̅ ̷͉͗y̶̤͗ô̵̯ṵ̴̆ ̷̛̤l̵̦̎ī̴̼k̸̛̹e̴̘͑ ̸̢̒a̵̮͐ ̵̤̒d̶̰͋e̶͈͝a̴̯͊l̶̩̓?̵̪̋ ̸̱̀(̷͉̋ẙ̴ͅ/̵̭̑n̵͎͘)̶͎͗"))
                     {
                         System.Threading.Thread.Sleep(1000);
                         Console.WriteLine();
                         Console.WriteLine("...");
                         System.Threading.Thread.Sleep(2000);
-                        if (RPG.GetUserYN("D̵̠̑ȏ̸͓ ̴̪̆ÿ̵̠́ő̵̘ũ̴̞ ̵̰̆à̵̼ḡ̷̞ŕ̵͚é̴ͅe̸͇̕ ̸̪͋t̷̟̅o̷̫͠ ̷̟͋s̸̪͠é̸͍r̸͎̒v̷̨̀é̷̢?̷̗̾ ̷̠͠(̶͉͘ÿ̵̞/̵̧̐n̵͌ͅ)̵̼͑"))
+                        if (Input.GetUserYN("D̵̠̑ȏ̸͓ ̴̪̆ÿ̵̠́ő̵̘ũ̴̞ ̵̰̆à̵̼ḡ̷̞ŕ̵͚é̴ͅe̸͇̕ ̸̪͋t̷̟̅o̷̫͠ ̷̟͋s̸̪͠é̸͍r̸͎̒v̷̨̀é̷̢?̷̗̾ ̷̠͠(̶͉͘ÿ̵̞/̵̧̐n̵͌ͅ)̵̼͑"))
                         {
-                            Hero voidServent = new Hero(120f, "Void Servent", new Move[]{ new CorruptMove("Convert Hero", true), new CorruptMove("Convert Enemy", false)});
+                            Hero voidServent = new Hero(120f, "Void Servent", new Move[] { new CorruptMove("Convert Hero", true), new CorruptMove("Convert Enemy", false) });
                             RPG.RecruitHero(voidServent);
                         }
                         else voidCall = false;

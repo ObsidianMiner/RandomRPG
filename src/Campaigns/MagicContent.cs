@@ -1,12 +1,5 @@
-﻿using RandomRPG.Campaigns;
-using RandomRPG.Entities;
+﻿using RandomRPG.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomRPG
 {
@@ -27,7 +20,7 @@ namespace RandomRPG
             new Hero(12f, "Huntsman", new Move[]{ new StealthMove("Snipe", 11f), new UselessMove("Fall Over")}),
             new Hero(25f, "The Mugger", new Move[]{ new ConvertMove("Mug"), new UselessMove("Smug")}),
             new Hero(26f, "Batman", new Move[]{new DamageMove("Batarang", 5f), new StunningMove("Crash Batmobile into", 0f, 0.5f)}),
-            new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999)}),
+            new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung Others", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999)}),
             new Hero(20f, "Task Manager", new Move[]{ }),
             new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SacrificeMove("Ice Ray", 15f, 15f)})
         };
@@ -53,7 +46,7 @@ namespace RandomRPG
         };
         public static RecoverableEnemy[] recoverableEnemies = new RecoverableEnemy[]
         {
-            
+
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
@@ -97,9 +90,17 @@ namespace RandomRPG
             new Enemy(12f, "HARD ENEMy", 2f)
         };
 
+        public static string[] tips =
+        {
+            "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
+            "TIP: Don't let the lamp go out! You can get more lamp oil from events.",
+            "TIP: Be ready for something to happen on turn 22!",
+            "TIP: It's Tyler's fault."
+        };
+
         public static void GenerateEnemies()
         {
-            if(RPG.turnNum > doorTurn - 4)
+            if (RPG.turnNum > doorTurn - 4)
             {
                 Battle.SpawnRandomEncounter(miniBossess);
                 Battle.skipDefaultGenerating = true;
@@ -117,6 +118,9 @@ namespace RandomRPG
             RPG.possibleEasyEnemies = possibleEasyEnemies;
             RPG.possibleMediumEnemies = possibleMediumEnemies;
             RPG.possibleHardEnemies = possibleHardEnemies;
+
+            RPG.tips = tips;
+
             RPG.recruitsTillBoss += 2;
             Console.WriteLine(new string('#', RPG.windowWidth));
             for (int i = 0; i < startingHeros.Length; i++)
@@ -136,9 +140,9 @@ namespace RandomRPG
         public static void LabEnterance()
         {
             Console.WriteLine("A door sudenly appears before you somewhat like you just needed to wait till turn 22.");
-            RPG.WaitForUser();
+            Input.WaitForUser();
             Console.WriteLine("A figure blocks the way");
-            RPG.WaitForUser();
+            Input.WaitForUser();
             Battle.SpawnRandomEncounter(bossess);
         }
         static void StartMessage()

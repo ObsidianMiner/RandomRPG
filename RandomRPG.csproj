@@ -74,6 +74,7 @@
     <Compile Include="Messages.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Entities\Hero.cs" />
+    <Compile Include="Utilities\Input.cs" />
     <Compile Include="Utilities\MultiplierList.cs" />
     <Compile Include="RPG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

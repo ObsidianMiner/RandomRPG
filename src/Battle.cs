@@ -8,7 +8,7 @@ namespace RandomRPG.Entities
 {
     public static class Battle
     {
-        public static int battleStartTurn = 1;
+        public static int turnBattleCycleStartedOn = 1;
         public static bool skipDefaultGenerating;
         public static void PrintField()
         {
@@ -59,7 +59,7 @@ namespace RandomRPG.Entities
         public static void GenerateEnemies()
         {
             skipDefaultGenerating = false;
-            battleStartTurn = RPG.turnNum + 1;
+            turnBattleCycleStartedOn = RPG.turnNum + 1;
             if (RPG.techCampaign)
             {
                 TechContent.Events();

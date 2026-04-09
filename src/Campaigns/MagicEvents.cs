@@ -1,9 +1,5 @@
 ﻿using RandomRPG.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomRPG.Campaigns
 {
@@ -11,7 +7,7 @@ namespace RandomRPG.Campaigns
     {
         public static void Events()
         {
-            if(RPG.turnNum > 22)
+            if (RPG.turnNum > 22)
             {
                 return;
             }
@@ -61,7 +57,7 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("You spot a lonley fruit punch sitting in the void.");
             Console.WriteLine("It has probably been there for days.");
-            if (RPG.GetUserYN("Drink it?"))
+            if (Input.GetUserYN("Drink it?"))
             {
                 Console.WriteLine("Who should drink it?");
                 int pickedHero = RPG.HeroOption(RPG.heros.ToArray());
@@ -69,7 +65,7 @@ namespace RandomRPG.Campaigns
                 {
                     Console.WriteLine($"{RPG.heros[pickedHero].name} put their mouth to the fruit punch to drink it, but then it smacked them in the face.");
                     RPG.heros[pickedHero].TakeDamage(7);
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                     Battle.skipDefaultGenerating = true;
                     RPG.enemies.Add(new Enemy(35, "Living Fruit Punch", 10));
                 }
@@ -79,7 +75,7 @@ namespace RandomRPG.Campaigns
                     Console.WriteLine($"{RPG.heros[pickedHero].name} took 5 damage, and was stunned.");
                     RPG.heros[pickedHero].TakeDamage(5);
                     RPG.heros[pickedHero].stuned = true;
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                 }
                 else
                 {
@@ -87,7 +83,7 @@ namespace RandomRPG.Campaigns
                     Console.WriteLine($"{RPG.heros[pickedHero].name} gained 15 Max HP");
                     RPG.heros[pickedHero].maxHP += 15;
                     RPG.heros[pickedHero].Heal(15);
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                 }
             }
         }
@@ -95,10 +91,10 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("You find a village of dark figures slowly crawling around in the dark.");
             Console.WriteLine("One comes up to your crew");
-            RPG.WaitForUser();
+            Input.WaitForUser();
             Console.WriteLine("We desperatly crave... fooooooood.");
             Console.WriteLine("The figure gesters to some lamp oil behind them.");
-            if (RPG.GetUserYN("Offer a sacrifice?"))
+            if (Input.GetUserYN("Offer a sacrifice?"))
             {
                 int heroNum = RPG.HeroOption(RPG.heros.ToArray());
                 Console.WriteLine("Thank you... looks like my children will be eating well tonight");
@@ -129,7 +125,7 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("A suburban house lights up in the distance.");
             Console.WriteLine("As you get closer you hear music coming from the inside.");
-            if (RPG.GetUserYN("A man greets you at the enterance. Hey we are selling lamp oil, want some? I'll trade you for some work. (It will take 5 turns)"))
+            if (Input.GetUserYN("A man greets you at the enterance. Hey we are selling lamp oil, want some? I'll trade you for some work. (It will take 5 turns)"))
             {
                 RPG.turnNum += 5;
                 MagicContent.lampOil += 10;
@@ -139,11 +135,11 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("People swing down from ropes above surrounding you.");
             Console.WriteLine("A little gremlin steps out of the shadows, it looks like he wants to talk.");
-            if (RPG.GetUserYN("Hear them out? (They look pretty dangerous)"))
+            if (Input.GetUserYN("Hear them out? (They look pretty dangerous)"))
             {
                 Console.WriteLine("We need your help to beat the spaghetti monsters.");
                 Console.WriteLine("They have overcome 'Japan', and we need your help reclaiming it from them. It would be a difficult battle, but we would fight with eachother side by side.");
-                if (RPG.GetUserYN("Will you join us in battle?"))
+                if (Input.GetUserYN("Will you join us in battle?"))
                 {
                     Battle.skipDefaultGenerating = true;
                     MagicContent.lampOil += 25;
@@ -172,7 +168,7 @@ namespace RandomRPG.Campaigns
                         Console.WriteLine("Gained 5 lamp oil");
                         MagicContent.lampOil += 5;
                     }
-                    RPG.WaitForUser();
+                    Input.WaitForUser();
                 }
             }
             else
@@ -188,12 +184,12 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("You stumble upon a black hole.");
             Console.WriteLine("Don't question it.");
-            RPG.WaitForUser();
-            if (RPG.GetUserYN("Touch it?"))
+            Input.WaitForUser();
+            if (Input.GetUserYN("Touch it?"))
             {
-                if (RPG.GetUserYN("Are you sure?"))
+                if (Input.GetUserYN("Are you sure?"))
                 {
-                    if (RPG.GetUserYN("Are you sure you are sure?"))
+                    if (Input.GetUserYN("Are you sure you are sure?"))
                     {
                         RPG.heros.Add(new Hero(20f, "Black Hole", new Move[] { new GuiotineMove("Suck in", 4f) }));
                         RPG.heros[RPG.heros.Count - 1].OnSpawn();

@@ -44,12 +44,21 @@ namespace RandomRPG
             new Enemy(44f, "Astro Guardian!!", 13f)
         };
 
+        public static string[] tips =
+        {
+            "TIP: The ! on enemies determenes there danger or how much damage they wil do.",
+            "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
+            "TIP: Take out the strong enemies first so that you won't be struggling to take them out later.",
+            "TIP: Upgrading will delay you be noticed by the boss."
+        };
+
         public static void Setup()
         {
             RPG.possibleHeros = possibleHeros;
             RPG.possibleEasyEnemies = possibleEasyEnemies;
             RPG.possibleMediumEnemies = possibleMediumEnemies;
             RPG.possibleHardEnemies = possibleHardEnemies;
+            RPG.tips = tips;
 
             RPG.heros.Add(new Hero(20f, RPG.possibleGenericHeroNames[RandomUtil.Next(0, RPG.possibleGenericHeroNames.Length)], Move.basicMoveset));
             RPG.heros.Add(RPG.possibleHeros[RandomUtil.Next(0, RPG.possibleHeros.Length)]);

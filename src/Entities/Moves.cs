@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomRPG.Entities
 {
@@ -50,7 +45,7 @@ namespace RandomRPG.Entities
         }
         public override bool DoMove(Entity target)
         {
-            if (Battle.battleStartTurn != RPG.turnNum)
+            if (Battle.turnBattleCycleStartedOn != RPG.turnNum)
             {
                 Console.WriteLine("You can't sneak attack past the first turn!");
                 return false;
@@ -184,7 +179,7 @@ namespace RandomRPG.Entities
         public override bool DoMove(Entity target)
         {
             Console.WriteLine($"{owner.name} is defending all party members for {defence}hp.");
-            if(defendAll)
+            if (defendAll)
             {
                 for (int i = 0; i < RPG.heros.Count; i++)
                 {
@@ -229,7 +224,7 @@ namespace RandomRPG.Entities
         public override bool DoMove(Entity target)
         {
             Console.WriteLine($"{name} attacked {target.name} for {target.GetDamageDelt(dmg)}");
-            if(RandomUtil.NextDouble() < chance)
+            if (RandomUtil.NextDouble() < chance)
             {
                 Console.WriteLine($"{name} stunned {target.name}!");
                 target.stuned = true;
@@ -247,7 +242,7 @@ namespace RandomRPG.Entities
         }
         public override bool DoMove(Entity target)
         {
-            if(target is RecoverableEnemy recoverableEnemy)
+            if (target is RecoverableEnemy recoverableEnemy)
             {
                 Hero newHero = recoverableEnemy.recoverableHero;
                 if (!recoverableEnemy.corrupted)

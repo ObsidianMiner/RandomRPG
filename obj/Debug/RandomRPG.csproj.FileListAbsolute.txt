@@ -1,8 +1,0 @@
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Debug\RandomRPG.csproj.AssemblyReference.cache
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Debug\RandomRPG.csproj.CoreCompileInputs.cache
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Debug\RandomRPG V3.exe.config
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Debug\RandomRPG V3.exe
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\bin\Debug\RandomRPG V3.pdb
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Debug\RandomRPG V3.exe
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Debug\RandomRPG V3.pdb
-C:\Users\JGEle\Desktop\RandomRPG\RandomRPG\RandomRPG\obj\Debug\RandomRPG V3.exe.config

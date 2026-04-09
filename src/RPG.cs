@@ -33,6 +33,8 @@ namespace RandomRPG
         public static Enemy[] possibleMediumEnemies = new Enemy[] { };
         public static Enemy[] possibleHardEnemies = new Enemy[] { };
 
+        public static string[] tips;
+
         static void SetupWindow()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -46,7 +48,7 @@ namespace RandomRPG
             SetupWindow();
             BeginJourneyScreen();
             MainLoop();
-            WaitForUser();
+            Input.WaitForUser();
         }
         public static void MainLoop()
         {
@@ -119,7 +121,7 @@ namespace RandomRPG
                     heros[i].defence = 0;
                 }
                 if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp"))) return;
-                WaitForUser();
+                Input.WaitForUser();
             }
         }
         static void BeginJourneyScreen()
@@ -156,35 +158,7 @@ namespace RandomRPG
             while (!gotAid)
             {
                 Console.WriteLine("Wellcome back to the cozy campsite. Your heros have each healed by 10. There are recruits waiting pick one.");
-                string[] tips =
-                {
-                    "TIP: The ! on enemies determenes there danger or how much damage they wil do.",
-                    "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
-                    "TIP: Take out the strong enemies first so that you won't be struggling to take them out later.",
-                    "TIP: Upgrading will delay you be noticed by the boss."
-                };
-                if (techCampaign)
-                {
-                    tips = new string[]
-                    {
-                        "TIP: VR(🥽 ) enemies can be recovered with special moves.",
-                        "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
-                        "TIP: After turn 18, VERY POWERFULL MINIBOSSES can occur! Watch out, and be prepared!",
-                        "TIP: Heros recover 10hp after every battle.",
-                        "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
-                        "TIP: Defending enemies (🛡 ) protect all other enemies!"
-                    };
-                }
-                if (magicCapaign)
-                {
-                    tips = new string[]
-                    {
-                        "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
-                        "TIP: Don't let the lamp go out! You can get more lamp oil from events.",
-                        "TIP: Be ready for something to happen on turn 22!",
-                        "TIP: It's Tyler's fault."
-                    };
-                }
+
                 Console.WriteLine(tips[Math.Min(waveNum - 1, tips.Length - 1)]);
                 Console.WriteLine("Recruits at camp:");
                 Console.WriteLine();
@@ -238,32 +212,6 @@ namespace RandomRPG
             }
         }
 
-        public static bool GetUserYN(string question)
-        {
-            Console.WriteLine(question);
-            bool answered = false;
-            bool answer = false;
-            while (!answered)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                Console.WriteLine();
-                if (key == ConsoleKey.Y)
-                {
-                    answer = true;
-                    answered = true;
-                }
-                else if (key == ConsoleKey.N)
-                {
-                    answer = false;
-                    answered = true;
-                }
-                else
-                {
-                    Console.WriteLine(question + " (y/n)");
-                }
-            }
-            return answer;
-        }
         public static int HeroOption(Hero[] options)
         {
             int selected = -1;
@@ -307,12 +255,6 @@ namespace RandomRPG
                 if (heros[upgradeable].upgrade != null) return upgradeable;
             }
             return -1;
-        }
-        public static void WaitForUser()
-        {
-            Console.WriteLine("Press Any Key To Continue");
-            Console.ReadKey();
-            Console.WriteLine("");
         }
 
     }

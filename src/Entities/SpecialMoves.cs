@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomRPG.Entities
 {
@@ -31,7 +27,7 @@ namespace RandomRPG.Entities
         }
         public override bool DoMove(Entity target)
         {
-            if(target.stuned)
+            if (target.stuned)
             {
                 target.name = name;
                 int index = RPG.enemies.IndexOf(target as Enemy);
@@ -76,7 +72,7 @@ namespace RandomRPG.Entities
         {
             for (int i = 0; i < RPG.enemies.Count; i++)
             {
-                if (RPG.enemies[i].hp <= healthThreshhold) RPG.enemies[i].TakeDamage(healthThreshhold, i != RPG.enemies.Count - 1);
+                if (RPG.enemies[i].hp <= healthThreshhold) RPG.enemies[i].TakeDamage(9999);
             }
             return true;
         }
