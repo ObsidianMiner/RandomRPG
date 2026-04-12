@@ -1,7 +1,4 @@
 ﻿using RandomRPG.Campaigns;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 
 namespace RandomRPG.Entities
@@ -121,7 +118,7 @@ namespace RandomRPG.Entities
             {
                 if (RPG.heros[i].hp <= 0)
                 {
-                    Console.WriteLine($"{RPG.heros[i].name} Died! Get Your Act Together!");
+                    Messages.ColoredWriteLine($"{RPG.heros[i].name} Died! Get Your Act Together!", ConsoleColor.Red);
                 }
             }
             RPG.heros.RemoveAll(hero => hero.hp <= 0);

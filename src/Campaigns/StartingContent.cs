@@ -51,6 +51,14 @@ namespace RandomRPG
             "TIP: Take out the strong enemies first so that you won't be struggling to take them out later.",
             "TIP: Upgrading will delay you be noticed by the boss."
         };
+        public static string[] possibleGenericHeroNames = new string[]
+        {
+            "TheeThyThoe",
+            "Solider #384",
+            "John Smith",
+            "Rodrick",
+            "Man Of Pringlesvile"
+        };
 
         public static void Setup()
         {
@@ -60,7 +68,7 @@ namespace RandomRPG
             RPG.possibleHardEnemies = possibleHardEnemies;
             RPG.tips = tips;
 
-            RPG.heros.Add(new Hero(20f, RPG.possibleGenericHeroNames[RandomUtil.Next(0, RPG.possibleGenericHeroNames.Length)], Move.basicMoveset));
+            RPG.heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], Move.basicMoveset));
             RPG.heros.Add(RPG.possibleHeros[RandomUtil.Next(0, RPG.possibleHeros.Length)]);
             for (int i = 0; i < RPG.heros.Count; i++)
             {

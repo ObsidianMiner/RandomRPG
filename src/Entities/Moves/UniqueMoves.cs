@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public class GlowMove : Move
     {
@@ -8,12 +6,12 @@ namespace RandomRPG.Entities
         {
             this.name = name;
             hasTarget = false;
-            description = $"Save 1 lamp oil. Stuns the user.";
+            description = $"Gain 2 lamp oil, stuns the user.";
         }
         public override bool DoMove(Entity target)
         {
             owner.stuned = true;
-            MagicContent.lampOil++;
+            MagicContent.lampOil += 2;
             return true;
         }
     }
@@ -42,15 +40,17 @@ namespace RandomRPG.Entities
     }
     public class SecretTechniqueMove : Move
     {
-        public SecretTechniqueMove(string name)
+        bool hasDownside;
+        public SecretTechniqueMove(string name, bool hasDownside = true)
         {
             this.name = name;
+            this.hasDownside = hasDownside;
             heroTarget = true;
-            description = $"Select an ally that does not know the secret technique, they get to use a turn 3 times, and this character gets stunned. \"Secret? Glitches all of them.\"";
+            description = $"Select an ally that does not know the secret technique, they get to use a turn 3 times" + (hasDownside ? ", and this character gets stunned." : ".");
         }
         public override bool DoMove(Entity target)
         {
-            owner.stuned = true;
+            if (hasDownside) owner.stuned = true;
             for (int i = 0; i < 3; i++)
             {
                 target.DoTurn();
@@ -188,6 +188,42 @@ namespace RandomRPG.Entities
             if (target.hp <= 0)
             {
                 //Program.RecruitHero(new Hero(target.maxHP * 2, "Corrupted " + target.name));
+            }
+            return true;
+        }
+    }
+    public class StunAllMove : Move
+    {
+        public int uses;
+        public StunAllMove(string name, int uses)
+        {
+            this.name = name;
+            this.uses = uses;
+            this.hasTarget = false;
+            description = $"Stun ALL enemies. Can be used a max of {uses} time(s).";
+        }
+        public override bool DoMove(Entity target)
+        {
+            for (int i = 0; i < RPG.enemies.Count; i++)
+            {
+                RPG.enemies[i].stuned = true;
+            }
+            return true;
+        }
+    }
+    public class AllTargetsIncludingHerosDamage : AllTargetsDamage
+    {
+        public AllTargetsIncludingHerosDamage(string name, float damage) : base(name, damage)
+        {
+            description = $"Does {dmg} to all targets INCLUDING HEROS\n" +
+                $"very usefull if stabalized";
+        }
+        public override bool DoMove(Entity target)
+        {
+            if (!base.DoMove(target)) return false;
+            for (int i = 0; i < RPG.heros.Count; i++)
+            {
+                RPG.heros[i].TakeDamage(dmg, true);
             }
             return true;
         }

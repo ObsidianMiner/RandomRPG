@@ -53,5 +53,18 @@
             Console.WriteLine(@"|  _| | | | | | (_| | | | |_) | (_) \__ \__ \_|");
             Console.WriteLine(@"|_|   |_|_| |_|\__,_|_| |____/ \___/|___/___(_)");
         }
+        public static void DarknessConsumesMessage()
+        {
+            Console.WriteLine(@"     _            _                        ");
+            Console.WriteLine(@"    | |          | |                       ");
+            Console.WriteLine(@"  __| | __ _ _ __| | ___ __   ___  ___ ___ ");
+            Console.WriteLine(@" / _` |/ _` | '__| |/ / '_ \ / _ \/ __/ __|");
+            Console.WriteLine(@"| (_| | (_| | |  |   <| | | |  __/\__ \__ \");
+            Console.WriteLine(@" \__,_|\__,_|_|  |_|\_\_| |_|\___||___/___/");
+            Console.WriteLine(@"  ___ ___  _ __  ___ _   _ _ __ ___   ___  ___ ");
+            Console.WriteLine(@" / __/ _ \| '_ \/ __| | | | '_ ` _ \ / _ \/ __|");
+            Console.WriteLine(@"| (_| (_) | | | \__ \ |_| | | | | | |  __/\__ \");
+            Console.WriteLine(@" \___\___/|_| |_|___/\__,_|_| |_| |_|\___||___/");
+        }
     }
 }

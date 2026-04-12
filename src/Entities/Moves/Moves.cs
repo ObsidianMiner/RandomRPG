@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public abstract class Move
     {
@@ -219,7 +217,7 @@ namespace RandomRPG.Entities
             this.name = name;
             this.dmg = damage;
             this.chance = chance;
-            description = $"Deals {dmg}dmg; has {chance * 100}% chance to stun an enemy for 1 turn.";
+            description = $"Deals {dmg}dmg; has {(int)MathF.Round(chance * 100)}% chance to stun an enemy for 1 turn.";
         }
         public override bool DoMove(Entity target)
         {

@@ -6,57 +6,47 @@ namespace RandomRPG
     {
         public static List<Hero> heros = new List<Hero>();
         public static List<Enemy> enemies = new List<Enemy>();
-        public static int windowWidth = 115;
+        public static int windowWidth = 135;
         public static int turnNum;
         public static int waveNum;
+
         public static int herosRecruited = 0;
-        public static bool gameRunning = true;
-        public static bool techCampaign = false;
-        public static bool magicCapaign = false;
         public static int recruitsTillBoss = 6;
         public static bool bossSpawned = false;
-        public static string[] possibleGenericHeroNames = new string[]
-        {
-            "TheeThyThoe",
-            "Solider #384",
-            "John Smith",
-            "Rodrick",
-            "Man Of Pringlesvile"
-        };
+
+        public static bool techCampaign = false;
+        public static bool magicCapaign = false;
 
         //Loaded Content
-        public static Hero[] possibleHeros = new Hero[] { };
-        public static Enemy[] possibleEasyEnemies = new Enemy[] { };
-        public static Enemy[] possibleMediumEnemies = new Enemy[] { };
-        public static Enemy[] possibleHardEnemies = new Enemy[] { };
+        public static Hero[] possibleHeros = { };
+        public static Enemy[] possibleEasyEnemies = { };
+        public static Enemy[] possibleMediumEnemies = { };
+        public static Enemy[] possibleHardEnemies = { };
 
-        public static string[] tips;
-
-        static void SetupWindow()
-        {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.SetWindowSize(4, 4);
-            Console.WindowHeight = 2;
-            Console.WindowHeight++;
-        }
+        public static string[] tips = { };
 
         static void Main(string[] args)
         {
-            SetupWindow();
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             BeginJourneyScreen();
             MainLoop();
             Input.WaitForUser();
         }
         public static void MainLoop()
         {
+            bool gameRunning = true;
             while (gameRunning)
             {
                 waveNum++;
                 BattleLoop();
-                if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp")))
+                bool lampLoss = (magicCapaign && MagicContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp"));
+                if (heros.Count == 0 || lampLoss)
                 {
                     gameRunning = false;
-                    Messages.LoseGameMessage();
+
+                    if (lampLoss) Messages.DarknessConsumesMessage();
+                    else Messages.LoseGameMessage();
+
                     break;
                 }
                 if (herosRecruited >= recruitsTillBoss && bossSpawned)
@@ -70,11 +60,16 @@ namespace RandomRPG
         }
         public static void BattleLoop()
         {
-            if (herosRecruited >= recruitsTillBoss && !TechContent.voidCall)
+            if (herosRecruited >= recruitsTillBoss)
             {
                 Messages.BossMessage();
                 bossSpawned = true;
-                if (techCampaign)
+                if (magicCapaign)
+                {
+                    enemies.Clear();
+                    enemies.Add(new Enemy(1f, "A Twig", 2f));
+                }
+                else if (techCampaign)
                 {
                     enemies.Clear();
                     enemies.Add(new Mark(1000f, "Mark Zuckerberg", 12f));

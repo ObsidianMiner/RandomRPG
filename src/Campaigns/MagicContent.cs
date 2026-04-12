@@ -1,12 +1,11 @@
 ﻿using RandomRPG.Entities;
-using System;
 
 namespace RandomRPG
 {
     public static class MagicContent
     {
         const int doorTurn = 24;
-        public static int lampOil = 10;
+        public static int lampOil = 15;
         public static Hero[] startingHeros = new Hero[]
         {
             new Hero(30, "Forest Giant", new Move[]{ new DamageMove("NOOM NOOM, TASTES GOOD", 7f)}),
@@ -20,9 +19,11 @@ namespace RandomRPG
             new Hero(12f, "Huntsman", new Move[]{ new StealthMove("Snipe", 11f), new UselessMove("Fall Over")}),
             new Hero(25f, "The Mugger", new Move[]{ new ConvertMove("Mug"), new UselessMove("Smug")}),
             new Hero(26f, "Batman", new Move[]{new DamageMove("Batarang", 5f), new StunningMove("Crash Batmobile into", 0f, 0.5f)}),
-            new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung Others", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999)}),
-            new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 30f)}),
-            new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SacrificeMove("Ice Ray", 15f, 15f)})
+            new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung Others", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999) },
+                new Hero(52f, "Wungus", [new HealMove("Wung Others", 8f, 99), new StunAllMove("Spore Explosion", 1)])),
+            new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 30f)},
+                new Hero(8f, "Task Master", [new DamageMove("Erasure", 40f)])),
+            new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SacrificeMove("Ice Ray", 15f, 15f)}),
         };
         public static Enemy[] possibleEasyEnemies = new Enemy[]
         {

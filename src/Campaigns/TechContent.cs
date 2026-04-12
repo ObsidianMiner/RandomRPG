@@ -1,5 +1,4 @@
 ﻿using RandomRPG.Entities;
-using System;
 
 namespace RandomRPG
 {
@@ -115,7 +114,6 @@ namespace RandomRPG
         public static void SetupContent()
         {
             TechCampaignStartMessage();
-            RPG.possibleGenericHeroNames = possibleGenericHeroNames;
             RPG.possibleHeros = possibleHeros;
             RPG.possibleEasyEnemies = possibleEasyEnemies;
             RPG.possibleMediumEnemies = possibleMediumEnemies;

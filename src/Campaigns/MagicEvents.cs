@@ -1,5 +1,4 @@
 ﻿using RandomRPG.Entities;
-using System;
 
 namespace RandomRPG.Campaigns
 {
@@ -13,12 +12,15 @@ namespace RandomRPG.Campaigns
             }
             int rand = RandomUtil.Next(0, 10);
             if (rand < 6) Console.WriteLine();
+
+            //If lamp oil is low, guarentee events that give lamp oil.
             if (MagicContent.lampOil <= 5)
             {
                 if (rand < 2) rand = 0;
                 else if (rand < 4) rand = 4;
                 else rand = 5;
             }
+
             switch (rand)
             {
                 case 0:
@@ -101,13 +103,13 @@ namespace RandomRPG.Campaigns
                 while (RPG.heros[heroNum].hp > 0)
                 {
                     RPG.heros[heroNum].TakeDamage(1, true);
-                    System.Threading.Thread.Sleep(30);
+                    Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(1, true);
-                    System.Threading.Thread.Sleep(30);
+                    Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(1, true);
-                    System.Threading.Thread.Sleep(30);
+                    Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(9, true);
-                    System.Threading.Thread.Sleep(300);
+                    Thread.Sleep(300);
                 }
                 Battle.KillDeadPlayers();
                 MagicContent.lampOil += 12;
@@ -191,7 +193,9 @@ namespace RandomRPG.Campaigns
                 {
                     if (Input.GetUserYN("Are you sure you are sure?"))
                     {
-                        RPG.heros.Add(new Hero(20f, "Black Hole", new Move[] { new GuiotineMove("Suck in", 4f) }));
+                        RPG.heros.Add(new Hero(20f, "Black Hole", new Move[] { new GuiotineMove("Suck in", 4f) },
+                            new Hero(45f, "Destabalizing Hole", [new AllTargetsDamage("Expell Radiation", 5f)],
+                            new Hero(100f, "Apotheosis", [new GlowMove("Glow"), new AllTargetsDamage("Blind", 9f), new HealMove("Gleam", 40f, 2), new SecretTechniqueMove("Empower", false)]))));
                         RPG.heros[RPG.heros.Count - 1].OnSpawn();
                     }
                 }
