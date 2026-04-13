@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public class Enemy : Entity
     {
@@ -18,7 +12,7 @@ namespace RandomRPG.Entities
         public override void TakeDamage(float damage, bool waitToKill = false)
         {
             base.TakeDamage(damage, waitToKill);
-            if(!waitToKill) Battle.KillDeadEnemies();
+            if (!waitToKill) Battle.KillDeadEnemies();
         }
         public override string HPStatus()
         {

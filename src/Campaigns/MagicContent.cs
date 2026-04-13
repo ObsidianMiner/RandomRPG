@@ -4,7 +4,7 @@ namespace RandomRPG
 {
     public static class MagicContent
     {
-        const int doorTurn = 24;
+        const int doorTurn = 30;
         public static int lampOil = 15;
         public static Hero[] startingHeros = new Hero[]
         {
@@ -23,7 +23,7 @@ namespace RandomRPG
                 new Hero(52f, "Wungus", [new HealMove("Wung Others", 8f, 99), new StunAllMove("Spore Explosion", 1)])),
             new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 30f)},
                 new Hero(8f, "Task Master", [new DamageMove("Erasure", 40f)])),
-            new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SacrificeMove("Ice Ray", 15f, 15f)}),
+            new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SelfDamageMove("Ice Ray", 15f, 15f)}),
         };
         public static Enemy[] possibleEasyEnemies = new Enemy[]
         {
@@ -97,7 +97,7 @@ namespace RandomRPG
 
         public static void GenerateEnemies()
         {
-            if (RPG.turnNum > doorTurn - 4)
+            if (RPG.turnNum > doorTurn - 6)
             {
                 Battle.SpawnRandomEncounter(miniBossess);
                 Battle.skipDefaultGenerating = true;
@@ -125,10 +125,12 @@ namespace RandomRPG
             {
                 startingHeros[i].PrintHeroDescription();
             }
-            RPG.heros.Add(startingHeros[RPG.HeroOption(startingHeros)]);
+            RPG.heros.Add(startingHeros[Input.HeroOption(startingHeros)]);
             RPG.heros.Add(new Hero(30f, "The Lamp", new Move[] { new DamageMove("Smack", 6f) }));
+
             Console.WriteLine("The darkness is encroching in, whispering all around you...");
             Console.WriteLine("Keep the latern alive, and don't let it run out of oil!");
+
             Console.WriteLine(new string('#', RPG.windowWidth));
             for (int i = 0; i < RPG.heros.Count; i++)
             {

@@ -144,7 +144,7 @@
             this.name = $"{baseName} ({uses})";
             this.hp = hp;
             this.uses = uses;
-            description = $"Heals {hp}hp. Can be used a max of {uses} time(s).";
+            description = $"Heals themself {hp}hp. Can be used a max of {uses} time(s).";
             hasTarget = false;
         }
         public override bool DoMove(Entity target)
@@ -265,11 +265,11 @@
             return false;
         }
     }
-    public class SacrificeMove : Move
+    public class SelfDamageMove : Move
     {
         public float dmg;
         public float cost;
-        public SacrificeMove(string name, float damage, float cost)
+        public SelfDamageMove(string name, float damage, float cost)
         {
             this.name = name;
             this.dmg = damage;

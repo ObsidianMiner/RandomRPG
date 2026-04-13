@@ -10,8 +10,8 @@ namespace RandomRPG.Campaigns
             {
                 return;
             }
-            int rand = RandomUtil.Next(0, 10);
-            if (rand < 6) Console.WriteLine();
+            int rand = RandomUtil.Next(0, 12);
+            if (rand < 7) Console.WriteLine();
 
             //If lamp oil is low, guarentee events that give lamp oil.
             if (MagicContent.lampOil <= 5)
@@ -42,6 +42,9 @@ namespace RandomRPG.Campaigns
                 case 6:
                     AntBrosEvent();
                     break;
+                case 7:
+                    BuildABot();
+                    break;
                 default:
                     break;
             }
@@ -62,14 +65,14 @@ namespace RandomRPG.Campaigns
             if (Input.GetUserYN("Drink it?"))
             {
                 Console.WriteLine("Who should drink it?");
-                int pickedHero = RPG.HeroOption(RPG.heros.ToArray());
+                int pickedHero = Input.HeroOption(RPG.heros.ToArray());
                 if (RandomUtil.NextBool(1, 3))
                 {
                     Console.WriteLine($"{RPG.heros[pickedHero].name} put their mouth to the fruit punch to drink it, but then it smacked them in the face.");
                     RPG.heros[pickedHero].TakeDamage(7);
                     Input.WaitForUser();
                     Battle.skipDefaultGenerating = true;
-                    RPG.enemies.Add(new Enemy(35, "Living Fruit Punch", 10));
+                    RPG.enemies.Add(new Enemy(30, "Living Fruit Punch", 10));
                 }
                 else if (RandomUtil.NextBool(1, 3))
                 {
@@ -98,17 +101,21 @@ namespace RandomRPG.Campaigns
             Console.WriteLine("The figure gesters to some lamp oil behind them.");
             if (Input.GetUserYN("Offer a sacrifice?"))
             {
-                int heroNum = RPG.HeroOption(RPG.heros.ToArray());
+                int heroNum = Input.HeroOption(RPG.heros.ToArray());
                 Console.WriteLine("Thank you... looks like my children will be eating well tonight");
                 while (RPG.heros[heroNum].hp > 0)
                 {
                     RPG.heros[heroNum].TakeDamage(1, true);
+                    Console.WriteLine($"{RPG.heros[heroNum].name} took 1 dmg");
                     Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(1, true);
+                    Console.WriteLine($"{RPG.heros[heroNum].name} took 1 dmg");
                     Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(1, true);
+                    Console.WriteLine($"{RPG.heros[heroNum].name} took 1 dmg");
                     Thread.Sleep(100);
                     RPG.heros[heroNum].TakeDamage(9, true);
+                    Console.WriteLine($"{RPG.heros[heroNum].name} took 9 dmg");
                     Thread.Sleep(300);
                 }
                 Battle.KillDeadPlayers();
@@ -149,7 +156,6 @@ namespace RandomRPG.Campaigns
                     RPG.enemies.Add(new DefendingEnemy(15, "Spaghettius MK.2🛡", 8, 7));
                     RPG.enemies.Add(new Enemy(20, "Meatballer", 9));
                     RPG.enemies.Add(new Enemy(13, "Spagettera", 10));
-                    RPG.enemies.Add(new Enemy(6, "Noodles", 4));
                     RPG.enemies.Add(new Enemy(6, "Noodler", 6));
                     RPG.enemies.Add(new Enemy(6, "Noodlest", 4));
                     RPG.heros.Add(new Hero(15, "Gremlin", new Move[] { new WeakenMove("Pee on them"), new StunningMove("Slam em'", 9, 0.3f) }));
@@ -184,7 +190,7 @@ namespace RandomRPG.Campaigns
         }
         public static void BlackHoleEvent()
         {
-            Console.WriteLine("You stumble upon a black hole.");
+            Messages.ColoredWriteLine("You stumble upon a black hole.", ConsoleColor.DarkBlue);
             Console.WriteLine("Don't question it.");
             Input.WaitForUser();
             if (Input.GetUserYN("Touch it?"))
@@ -199,6 +205,125 @@ namespace RandomRPG.Campaigns
                         RPG.heros[RPG.heros.Count - 1].OnSpawn();
                     }
                 }
+            }
+        }
+        public static void BuildABot()
+        {
+            Console.WriteLine($"{RPG.heros[0].name} walks through the growing fog. It gets harder and harder to see with each step. Smog fills their lungs.");
+            Console.WriteLine("BAM, they hit a giant steel door, it appears to be unlocked.");
+            if (Input.GetUserYN("Open the door?"))
+            {
+                Console.WriteLine("Machines whirl around you spinning around the facility. Arms grab at parts nearby assembling them into robots.");
+                Console.WriteLine("With all the smog you can't see where they are going");
+                Console.WriteLine("Something seems odd about the noises coming from them, but you can't put your finger on it.");
+                Input.WaitForUser();
+                Console.WriteLine("A mechanical arm slings at you");
+                Messages.ColoredWriteLine("Would you like to build a bot today sir or madam?", ConsoleColor.Green);
+                string option = Input.Options("", ["1", "2"], ["Build a bot", "Book it"]);
+                if (option == "1")
+                {
+
+                    int health = 20;
+                    List<Move> moves = new List<Move>();
+                    Messages.ColoredWriteLine("Great!", ConsoleColor.Green);
+                    Messages.ColoredWriteLine("Which ribcage would you like to use!", ConsoleColor.Green);
+                    string[] ribcageOptions = ["RC Car", "Giant Ball Of Putty", "Volitile Oil Drum"];
+                    string[] optionKeys = ["1", "2", "3"];
+                    string ribcageOption = Input.Options("", optionKeys, ribcageOptions);
+                    if (ribcageOption == "1")
+                    {
+                        health += 15;
+                        moves.Add(new StunningMove("Run Over", 6, 0.5f));
+                        Messages.ColoredWriteLine("Let me just make sure the batteries last long enough", ConsoleColor.Green);
+                        Console.WriteLine("[Places in a AA battery]");
+                    }
+                    else if (ribcageOption == "2")
+                    {
+                        health += 35;
+                        moves.Add(new SelfHealMove("Meld Together", 2f, 99));
+                        Messages.ColoredWriteLine("Uhhh... interesting, I'll see what I can do", ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        moves.Add(new SelfDamageMove("Explode", 30f, 99f));
+                        Messages.ColoredWriteLine("I hope you live a good long life...", ConsoleColor.Green);
+                    }
+
+                    Messages.ColoredWriteLine("Now for some limbs, what body is good without some limbs!", ConsoleColor.Green);
+                    Messages.ColoredWriteLine($"Which limbs would you like to add to your {ribcageOptions[Array.IndexOf(optionKeys, ribcageOption)]}?", ConsoleColor.Green);
+                    string limbOption = Input.Options("", ["1", "2", "3"], ["Razerblades", "Comic Books", "You"]);
+                    if (limbOption == "1")
+                    {
+                        health -= 5;
+                        moves.Add(new DamageMove("Blade 'Em", 11));
+                        Messages.ColoredWriteLine("Nice pick, should be able to do some REAL carnage.", ConsoleColor.Green);
+                    }
+                    else if (limbOption == "2")
+                    {
+                        health += 10;
+                        moves.Add(new UselessMove("Read from your sleves"));
+                        Messages.ColoredWriteLine("This does not seem very, uhh practical.", ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        Messages.ColoredWriteLine("I'm not sure I can do that?", ConsoleColor.Green);
+                        Messages.ColoredWriteLine("I guess I can try?", ConsoleColor.Green);
+                        Input.WaitForUser();
+                        Console.WriteLine("The arm starts sawing itself off");
+                        Messages.ColoredWriteLine("Wait, hold up I might be stupid-,", ConsoleColor.Green);
+                        Thread.Sleep(1500);
+                        for (int i = 0; i < 7; i++)
+                        {
+                            Messages.ColoredWriteLine("stupid-", i > 2 ? ConsoleColor.Red : ConsoleColor.Green);
+                            Thread.Sleep(300);
+                        }
+                        Input.WaitForUser();
+                        Console.WriteLine($"The arm is still somewhat opperational, but no longer sentient.");
+                        Console.WriteLine($"{RPG.heros[0].name} decides to take it with him for some repairs if nessesary");
+                        RPG.heros[0].moves = RPG.heros[0].moves.Append(new SelfHealMove("Mechanical Arm Repair", 20f, 1)).ToArray();
+                        RPG.heros[0].OnSpawn();
+                        Input.WaitForUser();
+                        return;
+                    }
+
+
+                    Messages.ColoredWriteLine("Now time for the finishing touches!", ConsoleColor.Green);
+                    Messages.ColoredWriteLine("Are you ready to become a bot an embrace the steel!", ConsoleColor.Green);
+                    Console.WriteLine("Sawblades, chainsaws, hammers and more come from the ceiling and surround you.");
+                    Input.WaitForUser();
+                    RPG.heros.Add(new Hero(health, RPG.heros[0].name + "?", moves.ToArray()));
+                    RPG.heros[RPG.heros.Count - 1].OnSpawn();
+
+                    while (RPG.heros[0].hp > 0)
+                    {
+                        RPG.heros[0].TakeDamage(8, true);
+                        Console.WriteLine($"{RPG.heros[0].name} took 8 dmg");
+                        Thread.Sleep(100);
+                    }
+                    Battle.KillDeadPlayers();
+                    Input.WaitForUser();
+                }
+                else
+                {
+                    Console.WriteLine($"{RPG.heros[0].name} dashes away as fast as possible, triping and falls over a shiny metal object");
+                    RPG.heros[0].TakeDamage(2);
+                    Console.WriteLine($"{RPG.heros[0].name} took 2 dmg");
+                    Input.WaitForUser();
+                    Console.WriteLine($"{RPG.heros[0].name} seems to have triped on a fine titanium shield.");
+                    RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 4)).ToArray();
+                    RPG.heros[0].OnSpawn();
+                    Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 4 damage.");
+                    Input.WaitForUser();
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{RPG.heros[0].name} walks away, slowly. When he notices something on the ground.");
+                Console.WriteLine($"{RPG.heros[0].name} bends down, and picks up a fine titanium shield off the ground.");
+                RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 4)).ToArray();
+                RPG.heros[0].OnSpawn();
+                Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 4 damage.");
+                Input.WaitForUser();
             }
         }
     }

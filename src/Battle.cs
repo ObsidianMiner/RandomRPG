@@ -119,6 +119,7 @@ namespace RandomRPG.Entities
                 if (RPG.heros[i].hp <= 0)
                 {
                     Messages.ColoredWriteLine($"{RPG.heros[i].name} Died! Get Your Act Together!", ConsoleColor.Red);
+                    RPG.heros[i].OnDeath();
                 }
             }
             RPG.heros.RemoveAll(hero => hero.hp <= 0);
@@ -131,6 +132,7 @@ namespace RandomRPG.Entities
                 {
                     if (RPG.enemies[i].hp < -4) Console.WriteLine($"You Obliterated {RPG.enemies[i].name}!");
                     else Console.WriteLine($"You Killed {RPG.enemies[i].name}!");
+                    RPG.enemies[i].OnDeath();
                 }
             }
             RPG.enemies.RemoveAll(enemy => enemy.hp <= 0);

@@ -39,7 +39,7 @@ namespace RandomRPG
             {
                 waveNum++;
                 BattleLoop();
-                bool lampLoss = (magicCapaign && MagicContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp"));
+                bool lampLoss = (magicCapaign && (MagicContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp")));
                 if (heros.Count == 0 || lampLoss)
                 {
                     gameRunning = false;
@@ -72,7 +72,7 @@ namespace RandomRPG
                 else if (techCampaign)
                 {
                     enemies.Clear();
-                    enemies.Add(new Mark(1000f, "Mark Zuckerberg", 12f));
+                    enemies.Add(new Mark(600f, "Mark Zuckerberg", 12f));
                     enemies[0].OnSpawn();
                 }
                 else
@@ -202,24 +202,6 @@ namespace RandomRPG
             {
                 heros[i].Heal(10f);
             }
-        }
-
-        public static int HeroOption(Hero[] options)
-        {
-            int selected = -1;
-            while (selected == -1)
-            {
-                for (int i = 0; i < options.Length; i++)
-                {
-                    Console.WriteLine($"{i}.{options[i].name}");
-                }
-                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int sel))
-                {
-                    selected = sel;
-                }
-                Console.WriteLine();
-            }
-            return selected;
         }
         public static void RecruitHero(Hero hero)
         {

@@ -19,15 +19,15 @@ namespace RandomRPG
             new Hero(32f, "Gun", new Move[]{new DamageMove("Shoot", 6f)},
                 new Hero(75f, "Railcannon", new Move[] { new StunningMove("Blasting Obliteration", 12f, 0.2f), new WeakenMove("Ominously Stand Still")})),
             new Hero(28f, "Skateboarder", new Move[]{new UselessMove("Kickflip"), new UselessMove("Dragon Flip"), new UselessMove("360 Spin")},
-                new Hero(19f, "RAD Skater", new Move[]{ new RecoveringMove("Knock Out"), new SacrificeMove("Hospital Flip", 15f, 5f), new UselessMove("360 Spin")})),
+                new Hero(19f, "RAD Skater", new Move[]{ new RecoveringMove("Knock Out"), new SelfDamageMove("Hospital Flip", 15f, 5f), new UselessMove("360 Spin")})),
             new Hero(16f, "Flappy Bird", new Move[]{ new StunningMove("Slam", 4f, 0.5f)}),
             new Hero(39f, "Gordon Ramsay", new Move[]{ new WeakenMove("Idiot Sandwich"), new HealMove("Cook", 7f, 20), new UselessMove("Nothing")}),
             new Hero(30f, "Minecraft Dog", new Move[]{new DamageMove("Bite", 7f), new HealMove("Feed Rotten Flesh", 5f, 64)},
                 new Hero(60f, "Dog's Ghost", new Move[]{new WeakenMove("Haunt"), new DefendMove("Bestow Luck", 4f)})),
             new Hero(20f, "Multi-Explosive", new Move[]{ new RecoveringMove("EMP Blast"), new AllTargetsDamage("Press Big Red Button", 3f), new DefendMove("Insta-Wall", 1)}),
-            new Hero(35f, "Chomper", new Move[]{ new StunningMove("NOM", 5f, 0.2f), new SacrificeMove("Furosious NNOOMM", 20f, 15f)}),
-            new Hero(25f, "Just A Bomb", new Move[]{ new SacrificeMove("Blow Up", 40f, 99f), new UselessMove("Make Bomb Beeps")},
-                new Hero(45f, "Just A Thermonuclear Warhead", new Move[]{new SacrificeMove("Blow Up", 80f, 99f), new WeakenMove("Threatening Beeps"), new UselessMove("Make Bomb Beeps") }))
+            new Hero(35f, "Chomper", new Move[]{ new StunningMove("NOM", 5f, 0.2f), new SelfDamageMove("Furosious NNOOMM", 20f, 15f)}),
+            new Hero(25f, "Just A Bomb", new Move[]{ new SelfDamageMove("Blow Up", 40f, 99f), new UselessMove("Make Bomb Beeps")},
+                new Hero(45f, "Just A Thermonuclear Warhead", new Move[]{new SelfDamageMove("Blow Up", 80f, 99f), new WeakenMove("Threatening Beeps"), new UselessMove("Make Bomb Beeps") }))
         };
         public static Enemy[] possibleEasyEnemies = new Enemy[]
         {

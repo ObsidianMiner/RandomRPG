@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public abstract class Entity
     {
@@ -18,6 +12,10 @@ namespace RandomRPG.Entities
         public virtual void OnSpawn()
         {
             hp = maxHP;
+        }
+        public virtual void OnDeath()
+        {
+
         }
 
         public virtual void TakeDamage(float damage, bool waitToKill = false)

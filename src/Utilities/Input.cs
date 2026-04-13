@@ -1,4 +1,4 @@
-﻿using System;
+﻿using RandomRPG.Entities;
 
 namespace RandomRPG
 {
@@ -9,10 +9,11 @@ namespace RandomRPG
             Console.WriteLine("Press Any Key To Continue");
             Console.ReadKey();
             Console.WriteLine("");
+            Console.WriteLine("");
         }
         public static bool GetUserYN(string question)
         {
-            Console.WriteLine(question);
+            Console.WriteLine(question + " (y/n)");
             bool answered = false;
             bool answer = false;
             while (!answered)
@@ -35,6 +36,46 @@ namespace RandomRPG
                 }
             }
             return answer;
+        }
+        public static string Options(string question, string[] keys, string[] options)
+        {
+            Console.WriteLine(question);
+            string key = "";
+            while (true)
+            {
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.WriteLine($"{keys[i]}.{options[i]}");
+                }
+                key = Console.ReadKey().KeyChar.ToString();
+                Console.WriteLine();
+
+                if (keys.Contains(key))
+                {
+                    return key;
+                }
+                else
+                {
+                    Console.WriteLine(question);
+                }
+            }
+        }
+        public static int HeroOption(Hero[] options)
+        {
+            int selected = -1;
+            while (selected == -1)
+            {
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.WriteLine($"{i}.{options[i].name}");
+                }
+                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int sel))
+                {
+                    selected = sel;
+                }
+                Console.WriteLine();
+            }
+            return selected;
         }
     }
 }
