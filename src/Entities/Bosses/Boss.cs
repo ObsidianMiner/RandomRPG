@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public class Boss : Enemy
     {
@@ -32,12 +26,12 @@ namespace RandomRPG.Entities
         }
         public override void DoTurn()
         {
-            if(turnNum == 0)
+            if (turnNum == 0)
             {
                 Summon(summons[0]);
                 Summon(summons[1]);
             }
-            else if(turnNum == 1)
+            else if (turnNum == 1)
             {
                 Summon(summons[2]);
                 Summon(summons[3]);

@@ -40,8 +40,8 @@ namespace RandomRPG
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
-            new Enemy(36f, "Uncle Sam!!!", 16f),
-            new Enemy(44f, "Astro Guardian!!", 13f)
+            new Enemy(40f, "Uncle Sam!!!", 16f),
+            new Enemy(50f, "Astro Guardian!!", 13f)
         };
 
         public static string[] tips =

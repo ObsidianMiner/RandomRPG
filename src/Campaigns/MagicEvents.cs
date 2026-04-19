@@ -34,13 +34,13 @@ namespace RandomRPG.Campaigns
                     FruitPunchEvent();
                     break;
                 case 4:
-                    AntiSpaghettiSquadEvent();
+                    if (RPG.waveNum > 2) AntiSpaghettiSquadEvent();
                     break;
                 case 5:
                     HouseInTheVoidEvent();
                     break;
                 case 6:
-                    AntBrosEvent();
+                    VoidAnts();
                     break;
                 case 7:
                     BuildABot();
@@ -49,14 +49,26 @@ namespace RandomRPG.Campaigns
                     break;
             }
         }
-        public static void AntBrosEvent()
+        public static void VoidAnts()
         {
+            Console.WriteLine("A giant ant hill is in front of you, and somehow is the only way forward.");
+            Console.WriteLine("Inside is a 2 paths. One through a giant queen ant's room, and another a worker camp");
+            string option = Input.Options("Where would you like to progress", ["1", "2"], ["Queen's Room", "Worker Camp"]);
+
             Battle.skipDefaultGenerating = true;
-            RPG.enemies.Add(new Enemy(2f, "Ant Bro", 6f));
-            RPG.enemies.Add(new Enemy(2f, "Ant Bro", 6f));
-            RPG.enemies.Add(new Enemy(2f, "Ant Bro", 6f));
-            RPG.enemies.Add(new Enemy(2f, "Ant Bro", 6f));
-            RPG.enemies.Add(new Enemy(2f, "Ant Bro", 6f));
+            if (option == "1")
+            {
+                RPG.enemies.Add(new Enemy(45f, "Queen Ant", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+            }
+            else
+            {
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+            }
         }
         public static void FruitPunchEvent()
         {
@@ -98,7 +110,8 @@ namespace RandomRPG.Campaigns
             Console.WriteLine("One comes up to your crew");
             Input.WaitForUser();
             Console.WriteLine("We desperatly crave... fooooooood.");
-            Console.WriteLine("The figure gesters to some lamp oil behind them.");
+            Console.WriteLine("The figure gesters to some lamp oil behind them (12).");
+            RPG.DisplayLampOil();
             if (Input.GetUserYN("Offer a sacrifice?"))
             {
                 int heroNum = Input.HeroOption(RPG.heros.ToArray());
@@ -134,6 +147,7 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("A suburban house lights up in the distance.");
             Console.WriteLine("As you get closer you hear music coming from the inside.");
+            RPG.DisplayLampOil();
             if (Input.GetUserYN("A man greets you at the enterance. Hey we are selling lamp oil, want some? I'll trade you for some work. (It will take 5 turns)"))
             {
                 RPG.turnNum += 5;
@@ -152,19 +166,19 @@ namespace RandomRPG.Campaigns
                 {
                     Battle.skipDefaultGenerating = true;
                     MagicContent.lampOil += 25;
-                    RPG.enemies.Add(new TimeBomb(50, "Spaghetti God", 13, 7));
-                    RPG.enemies.Add(new DefendingEnemy(15, "Spaghettius MK.2🛡", 8, 7));
-                    RPG.enemies.Add(new Enemy(20, "Meatballer", 9));
-                    RPG.enemies.Add(new Enemy(13, "Spagettera", 10));
-                    RPG.enemies.Add(new Enemy(6, "Noodler", 6));
-                    RPG.enemies.Add(new Enemy(6, "Noodlest", 4));
-                    RPG.heros.Add(new Hero(15, "Gremlin", new Move[] { new WeakenMove("Pee on them"), new StunningMove("Slam em'", 9, 0.3f) }));
+                    RPG.enemies.Add(new Enemy(99, "Spaghetti God", 19));
+                    RPG.enemies.Add(new DefendingEnemy(17, "Spaghettius MK.2🛡", 8, 7));
+                    RPG.enemies.Add(new Enemy(26, "Meatballer", 13));
+                    RPG.enemies.Add(new Enemy(18, "Spagettera", 14));
+                    RPG.enemies.Add(new Enemy(6, "Noodler", 8));
+                    RPG.enemies.Add(new Enemy(6, "Noodlest", 7));
+                    RPG.heros.Add(new Hero(14f, "Gremlin", new Move[] { new WeakenMove("Pee on them"), new StunningMove("Slam em'", 9, 0.3f) }));
                     RPG.heros[RPG.heros.Count - 1].OnSpawn();
-                    RPG.heros.Add(new Hero(20f, "Fruit Ninja", new Move[] { new AllTargetsDamage("Slice", 4f) }));
+                    RPG.heros.Add(new Hero(19f, "Fruit Ninja", new Move[] { new AllTargetsDamage("Slice", 4f) }));
                     RPG.heros[RPG.heros.Count - 1].OnSpawn();
-                    RPG.heros.Add(new Hero(25f, "Ninja #132", new Move[] { new StealthMove("Stealh Strike", 14f), new AllTargetsDamage("Ninja Slice", 8f), new DefendMove("Hide", 10) }));
+                    RPG.heros.Add(new Hero(24f, "Ninja #132", new Move[] { new StealthMove("Stealh Strike", 14f), new AllTargetsDamage("Ninja Slice", 4f), new DefendMove("Hide", 10, false) }));
                     RPG.heros[RPG.heros.Count - 1].OnSpawn();
-                    RPG.heros.Add(new Hero(35f, "Golem", new Move[] { new TargetedDefendMove("Golem Block", 8), new StunningMove("Big Fat Punch", 4f, 0.2f) }));
+                    RPG.heros.Add(new Hero(34f, "Golem", new Move[] { new TargetedDefendMove("Golem Block", 8), new StunningMove("Big Fat Punch", 4f, 0.2f) }));
                     RPG.heros[RPG.heros.Count - 1].OnSpawn();
                 }
                 else
@@ -200,9 +214,10 @@ namespace RandomRPG.Campaigns
                     if (Input.GetUserYN("Are you sure you are sure?"))
                     {
                         RPG.heros.Add(new Hero(20f, "Black Hole", new Move[] { new GuiotineMove("Suck in", 4f) },
-                            new Hero(45f, "Destabalizing Hole", [new AllTargetsDamage("Expell Radiation", 5f)],
+                            new Hero(45f, "Destabalizing Hole", [new AllTargetsIncludingHerosDamage("Expell Radiation", 5f)],
                             new Hero(100f, "Apotheosis", [new GlowMove("Glow"), new AllTargetsDamage("Blind", 9f), new HealMove("Gleam", 40f, 2), new SecretTechniqueMove("Empower", false)]))));
                         RPG.heros[RPG.heros.Count - 1].OnSpawn();
+                        RPG.heros[RPG.heros.Count - 1].PrintHeroDescription();
                     }
                 }
             }
@@ -223,7 +238,7 @@ namespace RandomRPG.Campaigns
                 if (option == "1")
                 {
 
-                    int health = 20;
+                    int health = 25;
                     List<Move> moves = new List<Move>();
                     Messages.ColoredWriteLine("Great!", ConsoleColor.Green);
                     Messages.ColoredWriteLine("Which ribcage would you like to use!", ConsoleColor.Green);
@@ -232,20 +247,20 @@ namespace RandomRPG.Campaigns
                     string ribcageOption = Input.Options("", optionKeys, ribcageOptions);
                     if (ribcageOption == "1")
                     {
-                        health += 15;
+                        health += 10;
                         moves.Add(new StunningMove("Run Over", 6, 0.5f));
                         Messages.ColoredWriteLine("Let me just make sure the batteries last long enough", ConsoleColor.Green);
                         Console.WriteLine("[Places in a AA battery]");
                     }
                     else if (ribcageOption == "2")
                     {
-                        health += 35;
+                        health += 30;
                         moves.Add(new SelfHealMove("Meld Together", 2f, 99));
                         Messages.ColoredWriteLine("Uhhh... interesting, I'll see what I can do", ConsoleColor.Green);
                     }
                     else
                     {
-                        moves.Add(new SelfDamageMove("Explode", 30f, 99f));
+                        moves.Add(new SelfDamageMove("Explode", 40f, 99f));
                         Messages.ColoredWriteLine("I hope you live a good long life...", ConsoleColor.Green);
                     }
 
@@ -288,10 +303,19 @@ namespace RandomRPG.Campaigns
 
 
                     Messages.ColoredWriteLine("Now time for the finishing touches!", ConsoleColor.Green);
+                    Messages.ColoredWriteLine("What would you like to name your new form!", ConsoleColor.Green);
+
+                    string name = "";
+                    while (name.Trim().Length > 0)
+                    {
+                        string? nameGiven = Console.ReadLine();
+                        if (nameGiven != null) name = nameGiven;
+                    }
+
                     Messages.ColoredWriteLine("Are you ready to become a bot an embrace the steel!", ConsoleColor.Green);
                     Console.WriteLine("Sawblades, chainsaws, hammers and more come from the ceiling and surround you.");
                     Input.WaitForUser();
-                    RPG.heros.Add(new Hero(health, RPG.heros[0].name + "?", moves.ToArray()));
+                    RPG.heros.Add(new Hero(health, name, moves.ToArray()));
                     RPG.heros[RPG.heros.Count - 1].OnSpawn();
 
                     while (RPG.heros[0].hp > 0)

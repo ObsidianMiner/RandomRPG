@@ -38,7 +38,7 @@ namespace RandomRPG
             while (gameRunning)
             {
                 waveNum++;
-                BattleLoop();
+                RunBattle();
                 bool lampLoss = (magicCapaign && (MagicContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp")));
                 if (heros.Count == 0 || lampLoss)
                 {
@@ -58,29 +58,35 @@ namespace RandomRPG
                 Battle.GenerateEnemies();
             }
         }
-        public static void BattleLoop()
+        public static void DisplayLampOil() => Console.WriteLine($"💡{MagicContent.lampOil} lamp oil left...");
+        public static void SpawnBoss()
+        {
+            Messages.BossMessage();
+            bossSpawned = true;
+            if (magicCapaign)
+            {
+                enemies.Clear();
+                enemies.Add(new Kaleidoscope(999f, "Kaleidoscope", 8f));
+                enemies[0].OnSpawn();
+            }
+            else if (techCampaign)
+            {
+                enemies.Clear();
+                enemies.Add(new Mark(600f, "Mark Zuckerberg", 12f));
+                enemies[0].OnSpawn();
+            }
+            else
+            {
+                enemies.Clear();
+                enemies.Add(new Boss(200f, "The Government!!!!", 13f));
+                enemies[0].OnSpawn();
+            }
+        }
+        public static void RunBattle()
         {
             if (herosRecruited >= recruitsTillBoss)
             {
-                Messages.BossMessage();
-                bossSpawned = true;
-                if (magicCapaign)
-                {
-                    enemies.Clear();
-                    enemies.Add(new Enemy(1f, "A Twig", 2f));
-                }
-                else if (techCampaign)
-                {
-                    enemies.Clear();
-                    enemies.Add(new Mark(600f, "Mark Zuckerberg", 12f));
-                    enemies[0].OnSpawn();
-                }
-                else
-                {
-                    enemies.Clear();
-                    enemies.Add(new Boss(200f, "The Government!!!!", 13f));
-                    enemies[0].OnSpawn();
-                }
+                SpawnBoss();
             }
             while (turnNum < 1000)
             {
@@ -90,7 +96,7 @@ namespace RandomRPG
                 {
                     MagicContent.lampOil--;
                     if (MagicContent.lampOil < 0) return;
-                    Console.WriteLine($"💡{MagicContent.lampOil} lamp oil left...");
+                    DisplayLampOil();
                 }
                 for (int i = 0; i < heros.Count; i++)
                 {
@@ -116,6 +122,7 @@ namespace RandomRPG
                 Input.WaitForUser();
             }
         }
+
         static void BeginJourneyScreen()
         {
             Messages.StartGameMessage();
@@ -145,10 +152,13 @@ namespace RandomRPG
             int firstRecruit = FindNewRecruit(-1);
             int secondRecruit = FindNewRecruit(firstRecruit);
             int upgrade = FindUpgrade();
+            string upgradingCharacterName = "";
+            if (upgrade >= 0) upgradingCharacterName = heros[upgrade].name; //Used to fix reordering to change the upgrade.
 
             bool gotAid = false;
             while (!gotAid)
             {
+                if (upgrade > -1) upgrade = heros.FindIndex(h => h.name == upgradingCharacterName);
                 Console.WriteLine("Wellcome back to the cozy campsite. Your heros have each healed by 10. There are recruits waiting pick one.");
 
                 Console.WriteLine(tips[Math.Min(waveNum - 1, tips.Length - 1)]);
@@ -181,21 +191,30 @@ namespace RandomRPG
                     }
                 }
 
-                if (!int.TryParse(Console.ReadKey().KeyChar.ToString(), out int pickedHero)) continue;
-                if (pickedHero == 0)
+                Console.WriteLine("o.");
+                Console.WriteLine("Reorder party.");
+                Console.WriteLine();
+
+                string key = Console.ReadKey().KeyChar.ToString();
+
+                if (key == "0")
                 {
                     RecruitHero(possibleHeros[firstRecruit]);
                     gotAid = true;
                 }
-                else if (pickedHero == 1)
+                else if (key == "1")
                 {
                     RecruitHero(possibleHeros[secondRecruit]);
                     gotAid = true;
                 }
-                else if (pickedHero == 2)
+                else if (key == "2")
                 {
                     heros[upgrade].Upgrade();
                     gotAid = true;
+                }
+                else if (key == "o")
+                {
+                    ReOrderParty();
                 }
             }
             for (int i = 0; i < heros.Count; i++)
@@ -208,6 +227,25 @@ namespace RandomRPG
             heros.Add(hero);
             hero.OnSpawn();
             herosRecruited++;
+        }
+        public static void ReOrderParty()
+        {
+            Console.WriteLine("Select each character in the order you want them");
+            List<Hero> orderedHeros = new List<Hero>();
+            while (heros.Count > 0)
+            {
+                for (int i = 0; i < heros.Count; i++)
+                {
+                    Console.WriteLine($"{i}. {heros[i].name}");
+                }
+                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int indexPicked) && indexPicked >= 0 && indexPicked < heros.Count)
+                {
+                    orderedHeros.Add(heros[indexPicked]);
+                    heros.RemoveAt(indexPicked);
+                }
+                Console.WriteLine("");
+            }
+            heros = orderedHeros;
         }
         static int FindNewRecruit(int alreadyInSelection)
         {

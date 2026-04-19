@@ -34,7 +34,8 @@
             Console.WriteLine(@"   \_/\_/  |_|_| |_|_| |_|\___|_|  (_|_)");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine(@"A new challenger approches! Press V at the start for a new campagin!");
+            if (RPG.magicCapaign) Console.WriteLine($"A new challenger approches! Press {(RPG.techCampaign ? "m" : "v")} at the start for a new campagin!");
+            else Console.WriteLine("Congrats on beating the hardest campaign!");
         }
         public static void CampMessage()
         {

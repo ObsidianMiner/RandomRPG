@@ -38,7 +38,7 @@
     }
     public class AdvertisementEnemy : Enemy
     {
-        bool hasAdvertised;
+        bool hasAdvertised = false;
         public AdvertisementEnemy(float hp, string name, float dmg) : base(hp, name, dmg)
         {
 
@@ -49,7 +49,34 @@
             if (!hasAdvertised)
             {
                 System.Diagnostics.Process.Start("https://noobyest.itch.io");
+                hasAdvertised = true;
             }
+        }
+        public override Enemy Clone()
+        {
+            return new AdvertisementEnemy(hp, name, dmg);
+        }
+    }
+    public class RegeneratingEnemy : Enemy
+    {
+        public float regen;
+        public RegeneratingEnemy(float hp, string name, float dmg, float regen) : base(hp, name, dmg)
+        {
+            this.regen = regen;
+        }
+        public override void DoTurn()
+        {
+            Console.WriteLine($"{name} heals itself for {regen}hp.");
+            Heal(regen);
+            base.DoTurn();
+        }
+        public override string HPStatus()
+        {
+            return base.HPStatus() + $" 💚{regen}";
+        }
+        public override Enemy Clone()
+        {
+            return new RegeneratingEnemy(maxHP, name, dmg, regen);
         }
     }
     public class RecoverableEnemy : Enemy
@@ -140,6 +167,26 @@
         {
             base.OnSpawn();
             defence = 99f;
+        }
+    }
+    public class TemporaryEnemy : Enemy
+    {
+        public TemporaryEnemy(float hp, string name, float dmg, ConsoleColor color = ConsoleColor.White) : base(hp, name, dmg)
+        {
+            this.nameColor = color;
+        }
+        public override void DoTurn()
+        {
+            base.DoTurn();
+            TakeDamage(9999f, true);
+        }
+        public override string HPStatus()
+        {
+            return base.HPStatus() + "✨";
+        }
+        public override Enemy Clone()
+        {
+            return new TemporaryEnemy(maxHP, name, dmg, nameColor);
         }
     }
 }

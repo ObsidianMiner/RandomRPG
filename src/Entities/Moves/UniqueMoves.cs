@@ -58,25 +58,6 @@
             return true;
         }
     }
-    public class GuiotineMove : Move
-    {
-        public float healthThreshhold;
-        public GuiotineMove(string name, float healthThreshhold)
-        {
-            this.name = name;
-            this.healthThreshhold = healthThreshhold;
-            description = $"Kill all enemies with less than {healthThreshhold} health.";
-            hasTarget = false;
-        }
-        public override bool DoMove(Entity target)
-        {
-            for (int i = 0; i < RPG.enemies.Count; i++)
-            {
-                if (RPG.enemies[i].hp <= healthThreshhold) RPG.enemies[i].TakeDamage(9999);
-            }
-            return true;
-        }
-    }
     public class RandomMove : Move
     {
         public RandomMove(string name)

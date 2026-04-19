@@ -3,6 +3,7 @@
     public class Enemy : Entity
     {
         public float dmg;
+        public ConsoleColor nameColor;
         public Enemy(float hp, string name, float dmg)
         {
             this.maxHP = hp;

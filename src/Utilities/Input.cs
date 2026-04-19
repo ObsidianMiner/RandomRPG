@@ -63,7 +63,7 @@ namespace RandomRPG
         public static int HeroOption(Hero[] options)
         {
             int selected = -1;
-            while (selected == -1)
+            while (selected == -1 || selected >= options.Length)
             {
                 for (int i = 0; i < options.Length; i++)
                 {

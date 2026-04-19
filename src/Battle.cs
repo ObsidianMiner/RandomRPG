@@ -41,6 +41,7 @@ namespace RandomRPG.Entities
         public static void SpawnRandomEncounter(Enemy[][] minibossess)
         {
             Enemy[] miniBoss = minibossess[RandomUtil.Next(0, minibossess.Length)];
+            SpawnEncounter(miniBoss);
         }
         public static void SpawnEncounter(Enemy[] enemies)
         {
@@ -70,13 +71,27 @@ namespace RandomRPG.Entities
 
             if (!skipDefaultGenerating)
             {
+                //Always spawn 1 easy, and 1 medium enemy
                 RPG.enemies.Add(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)].Clone());
                 RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+
+
+                //Sometimes spawn an additional enemy past turn 6
                 if (RandomUtil.NextDouble() < 0.5f && RPG.turnNum > 6) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+
                 if (RandomUtil.NextDouble() < 0.5f)
                 {
+                    //Swarm
                     int swarmEnemyCount = (RPG.turnNum / 8) + 1;
                     if (RPG.turnNum > 20) RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
+
+                    //Magic campaign compresses enemies more
+                    if (RPG.magicCapaign && RPG.turnNum > 17)
+                    {
+                        swarmEnemyCount -= 1;
+                        RPG.enemies.Add(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+                    }
+
                     for (int i = 0; i < swarmEnemyCount; i++)
                     {
                         RPG.enemies.Add(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)].Clone());
@@ -84,8 +99,12 @@ namespace RandomRPG.Entities
                 }
                 else
                 {
-                    if (RPG.turnNum < (RPG.techCampaign ? 18 : 26) + RandomUtil.Next(-6, 10)) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
-                    else if (RPG.turnNum < (RPG.techCampaign || RPG.magicCapaign ? 20 : 30) + RandomUtil.Next(-6, 20)) RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
+                    //Hard enemies
+
+                    //If too early with some variance spawn an extra medium enemy
+                    if (RPG.turnNum < (RPG.techCampaign || RPG.magicCapaign ? 17 : 25) + RandomUtil.Next(-6, 7)) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+                    //Then attempt to spawn a hard enemy, or if it rolls even higher, spawn 2.
+                    else if (RPG.turnNum < (RPG.techCampaign | RPG.magicCapaign ? 20 : 30) + RandomUtil.Next(-6, 13)) RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
                     else
                     {
                         RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
