@@ -5,6 +5,7 @@
         public float maxHP;
         public float hp { get; protected set; }
         public string name { get; set; }
+        public ConsoleColor nameColor = ConsoleColor.White;
         public float defence = 0;
         public bool stuned;
         public bool stunImmune;

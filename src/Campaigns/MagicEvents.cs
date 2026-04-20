@@ -34,7 +34,6 @@ namespace RandomRPG.Campaigns
                     FruitPunchEvent();
                     break;
                 case 4:
-                    if (RPG.waveNum > 2) AntiSpaghettiSquadEvent();
                     break;
                 case 5:
                     HouseInTheVoidEvent();
@@ -44,6 +43,9 @@ namespace RandomRPG.Campaigns
                     break;
                 case 7:
                     BuildABot();
+                    break;
+                case 8:
+                    if (RPG.waveNum > 2) AntiSpaghettiSquadEvent();
                     break;
                 default:
                     break;

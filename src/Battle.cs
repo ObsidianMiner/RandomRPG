@@ -20,21 +20,19 @@ namespace RandomRPG.Entities
         }
         public static void PrintSide(List<Entity> side)
         {
-
             int spacing = RPG.windowWidth / (side.Count + 1);
             string[] names = new string[side.Count];
+            ConsoleColor[] colors = new ConsoleColor[side.Count];
             string[] status = new string[side.Count];
             string[][] sideInfo = new string[][] { names, status };
             for (int i = 0; i < side.Count; i++)
             {
+                colors[i] = side[i].nameColor;
                 names[i] = side[i].name;
                 status[i] = side[i].HPStatus();
             }
-            string[] rows = EvenColumns(spacing, sideInfo);
-            for (int i = 0; i < rows.Length; i++)
-            {
-                Console.WriteLine(rows[i].PadLeft(rows[i].Length + spacing));
-            }
+
+            PrintEvenColumns(sideInfo, [colors]);
 
             Console.WriteLine();
         }
@@ -156,42 +154,61 @@ namespace RandomRPG.Entities
             }
             RPG.enemies.RemoveAll(enemy => enemy.hp <= 0);
         }
-        public static string[] EvenColumns(int desiredWidth, IEnumerable<IEnumerable<string>> lists)
+
+        //------------------
+        //    Display
+        //------------------
+
+        static int GetConsoleLength(string s)
         {
-            return EvenColumns(desiredWidth, true, lists).ToArray();
+            return s.EnumerateRunes().Count();
         }
-
-        public static IEnumerable<string> EvenColumns(int desiredWidth, bool rightOrLeft, IEnumerable<IEnumerable<string>> lists)
+        public static void PrintEvenColumns(string[][] lists, ConsoleColor[][] colors)
         {
-            return lists.Select(o => EvenColumns(desiredWidth, rightOrLeft, o.ToArray()));
-        }
-
-        public static string EvenColumns(int desiredWidth, bool rightOrLeftAlignment, string[] list, bool fitToItems = false)
-        {
-            // right alignment needs "-X" 'width' vs left alignment which is just "X" in the `string.Format` format string
-            int columnWidth = (rightOrLeftAlignment ? -1 : 1) *
-                                // fit to actual items? this could screw up "evenness" if
-                                // one column is longer than the others
-                                // and you use this with multiple rows
-                                (fitToItems
-                                    ? Math.Max(desiredWidth, list.Select(o => o.Length).Max())
-                                    : desiredWidth
-                                );
-            if (list.Length == 0) return "";
-            // make columns for all but the "last" (or first) one
-            string format = string.Concat(Enumerable.Range(rightOrLeftAlignment ? 0 : 1, list.Length - 1).Select(i => string.Format("{{{0},{1}}}", i, columnWidth)));
-
-            // then add the "last" one without Alignment
-            if (rightOrLeftAlignment)
+            //Validation
+            for (int i = 0; i < lists.Length - 1; i++)
             {
-                format += "{" + (list.Length - 1) + "}";
+                if (lists[i].Length != lists[i + 1].Length)
+                {
+                    throw new ApplicationException("PrintEvenColumns: lists must all be of the same length");
+                }
             }
-            else
-            {
-                format = "{0}" + format;
-            }
+            int columnCount = lists[0].Length;
+            if (columnCount == 0) { Console.WriteLine(); return; }
 
-            return string.Format(format, list);
+            //Get Required Widths
+            int totalWidth = RPG.windowWidth;
+            int[] columnRequiredWidths = new int[lists[0].Length];
+            for (int column = 0; column < columnCount; column++)
+            {
+                for (int i = 0; i < lists.Length; i++)
+                {
+                    columnRequiredWidths[column] = Math.Max(columnRequiredWidths[column], GetConsoleLength(lists[i][column]));
+                }
+            }
+            int totalTextWidth = columnRequiredWidths.Sum();
+            int remainingSpace = Math.Max(0, totalWidth - totalTextWidth);
+
+            string paddingText = new string(' ', remainingSpace / (columnCount + 1));
+
+            for (int i = 0; i < lists.Length; i++)
+            {
+                Console.Write(paddingText);
+                for (int column = 0; column < columnCount; column++)
+                {
+                    if (i < colors.Length)
+                    {
+                        Console.ForegroundColor = colors[i][column];
+                    }
+                    Console.Write(lists[i][column]);
+                    Console.ResetColor();
+
+
+                    Console.Write(new string(' ', columnRequiredWidths[column] - GetConsoleLength(lists[i][column])));
+                    Console.Write(paddingText);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
