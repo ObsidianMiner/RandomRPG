@@ -25,13 +25,13 @@ namespace RandomRPG
                 Console.WriteLine();
                 if (firstRecruit != -1)
                 {
-                    Console.Write("0.");
+                    Console.Write("1.");
                     RPG.possibleHeros[firstRecruit].PrintHeroDescription();
                     Console.WriteLine();
                 }
                 if (secondRecruit != -1)
                 {
-                    Console.Write("1.");
+                    Console.Write("2.");
                     RPG.possibleHeros[secondRecruit].PrintHeroDescription();
                     Console.WriteLine();
                 }
@@ -44,7 +44,7 @@ namespace RandomRPG
                     {
                         Console.WriteLine("Upgrade of the day:");
                         Console.WriteLine($"Upgrade {RPG.heros[upgrade].name} to");
-                        Console.Write("2.");
+                        Console.Write("3.");
                         RPG.heros[upgrade].upgrade.PrintHeroDescription();
                         Console.WriteLine();
                     }
@@ -56,17 +56,17 @@ namespace RandomRPG
 
                 string key = Console.ReadKey().KeyChar.ToString();
 
-                if (key == "0")
+                if (key == "1")
                 {
                     RPG.RecruitHero(RPG.possibleHeros[firstRecruit]);
                     gotAid = true;
                 }
-                else if (key == "1")
+                else if (key == "2")
                 {
                     RPG.RecruitHero(RPG.possibleHeros[secondRecruit]);
                     gotAid = true;
                 }
-                else if (key == "2")
+                else if (key == "3")
                 {
                     RPG.heros[upgrade].Upgrade();
                     gotAid = true;

@@ -52,10 +52,10 @@ namespace RandomRPG.Campaigns
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
             new Enemy(61f, "𐌍𐌵𐌋𐌋", 17f),
-            new Enemy(36f, "Herobrine", 14f),
-            new Enemy(44f, "Eyeless Dog", 11),
+            new Enemy(41, "Herobrine", 14f),
+            new Enemy(49, "Eyeless Dog", 11),
             new RecoverableEnemy(60f, "Nokia Phone🥽", 3f, new Hero(40f, "Nokia Phone", new Move[]{ new DefendMove("Harden", 4)})),
-            new Enemy(32f, "The Guitar Hero", 15f),
+            new Enemy(41, "The Guitar Hero", 15f),
         };
         public static Enemy[][] miniBossess = new Enemy[][]
         {
@@ -68,15 +68,15 @@ namespace RandomRPG.Campaigns
             },
             new Enemy[] {
                 new Enemy(5f, "Your Shadow", 7),
-                new Enemy(19f, "Imp", 6),
+                new Enemy(26, "Imp", 8),
                 new AdvertisementEnemy(30f, "Advertisement", 2),
                 new RegeneratingEnemy(24f, "Slime", 6, 5),
-                new Enemy(27f, "Sentiant Flying Sword", 18)
+                new Enemy(45, "Sentiant Flying Sword", 19)
             },
             new Enemy[]
             {
                 new Enemy(14f, "Tar Slime", 7f),
-                new RegeneratingEnemy(45f, "Clay Dunestrider", 18f, 18f),
+                new RegeneratingEnemy(45f, "Clay Dunestrider", 18f, 19),
                 new Enemy(14f, "Tar Slime", 7f)
             },
             new Enemy[]
@@ -92,7 +92,10 @@ namespace RandomRPG.Campaigns
         {
             "TIP: Enemies get harder with each turn, not just wave! Make your battles short.",
             "TIP: Don't let the lamp go out! You can get more lamp oil from events.",
-            "TIP: It's Tyler's fault."
+            "TIP: It's Tyler's fault.",
+            "TIP: You have a much higher chance of getting events giving lamp oil if you are almost out. Don't rely on it though!",
+            "TIP: Strong Minibosses start spawning after turn 22",
+            "TIP: Git Gud"
         };
 
         public static void GenerateEnemies()

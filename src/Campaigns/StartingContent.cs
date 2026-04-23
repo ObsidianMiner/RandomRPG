@@ -32,16 +32,17 @@ namespace RandomRPG.Campaigns
         };
         public static Enemy[] possibleMediumEnemies = new Enemy[]
         {
-            new Enemy(19f, "Ferrari!!", 10f),
-            new Enemy(15f, "Archer #394!", 11f),
-            new Enemy(30f, "The Wall", 0.5f),
-            new Enemy(17f, "Snake!!", 14f),
-            new Enemy(18f, "Asian Parents!!", 13f)
+            new Enemy(21f, "Ferrari!!", 10f),
+            new Enemy(16f, "Archer #394!", 11f),
+            new Enemy(32f, "The Wall", 0.5f),
+            new Enemy(19f, "Snake!!", 14f),
+            new Enemy(21f, "Asian Parents!!", 14f)
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
-            new Enemy(40f, "Uncle Sam!!!", 16f),
-            new Enemy(50f, "Astro Guardian!!", 13f)
+            new Enemy(44f, "Uncle Sam!!!", 16f),
+            new Enemy(50f, "Astro Guardian!!", 15f),
+            new Enemy(20f, "The Freaky Foot Eater!!!!", 25f)
         };
 
         public static string[] tips =

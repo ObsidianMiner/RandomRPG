@@ -119,7 +119,7 @@
         }
         public override bool DoMove(Entity target)
         {
-            Console.WriteLine($"{owner.name} is defending all party members for {defence}hp.");
+            Console.WriteLine($"is defending all party members for {defence}hp.");
             if (defendAll)
             {
                 for (int i = 0; i < RPG.heros.Count; i++)

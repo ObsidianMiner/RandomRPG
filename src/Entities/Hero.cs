@@ -20,6 +20,7 @@
             name = upgrade.name;
             moves = upgrade.moves;
             upgrade = upgrade.upgrade;
+            OnSpawn();
         }
         public override void OnSpawn()
         {
@@ -93,14 +94,6 @@
             for (int i = 0; i < moves.Length; i++)
             {
                 if (moves[i] is DefenceErrasingMove) return true;
-            }
-            for (int k = 0; k < moves.Length; k++)
-            {
-
-            }
-            foreach (Move move in moves)
-            {
-                moveNames.Add(move, "JKELSAJDFLKSJD");
             }
             return false;
         }

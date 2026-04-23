@@ -56,7 +56,7 @@ namespace RandomRPG.Campaigns
             Console.WriteLine("Inside is a 2 paths. One through a giant queen ant's room, and another a worker camp");
             int option = Input.Options("Where would you like to progress", ["Queen's Room", "Worker Camp"]);
 
-            Battle.skipDefaultGenerating = true;
+            Battlefield.skipDefaultGenerating = true;
             if (option == 0)
             {
                 RPG.enemies.Add(new Enemy(45f, "Queen Ant", 10f));
@@ -85,7 +85,7 @@ namespace RandomRPG.Campaigns
                     Console.WriteLine($"{RPG.heros[pickedHero].name} put their mouth to the fruit punch to drink it, but then it smacked them in the face.");
                     RPG.heros[pickedHero].TakeDamage(7);
                     Input.WaitForUser();
-                    Battle.skipDefaultGenerating = true;
+                    Battlefield.skipDefaultGenerating = true;
                     RPG.enemies.Add(new Enemy(30, "Living Fruit Punch", 10));
                 }
                 else if (RandomUtil.NextBool(1, 3))
@@ -133,12 +133,12 @@ namespace RandomRPG.Campaigns
                     Console.WriteLine($"{RPG.heros[heroNum].name} took 9 dmg");
                     Thread.Sleep(300);
                 }
-                Battle.KillDeadPlayers();
+                Battlefield.KillDeadPlayers();
                 DarkContent.lampOil += 20;
             }
             else
             {
-                Battle.skipDefaultGenerating = true;
+                Battlefield.skipDefaultGenerating = true;
                 RPG.enemies.Add(new Enemy(35, "Spider", 11));
                 RPG.enemies.Add(new Enemy(5, "Baby Spider", 1));
                 RPG.enemies.Add(new Enemy(5, "Baby Spider", 1));
@@ -211,7 +211,7 @@ namespace RandomRPG.Campaigns
             if (shouldSpawnWitch)
             {
                 Messages.ColoredWriteLine("You short sighted, nitwit there are more lifes at stake than just your own!", ConsoleColor.Blue);
-                Battle.skipDefaultGenerating = true;
+                Battlefield.skipDefaultGenerating = true;
                 RPG.enemies.Add(new RegeneratingEnemy(65f, "The Wicked Witch of the West", 22, 20f));
                 RPG.enemies.Add(new RegeneratingEnemy(18f, "Black Cat", 2, 18f));
             }
@@ -231,7 +231,7 @@ namespace RandomRPG.Campaigns
                 Console.WriteLine("They have overcome 'Japan', and we need your help reclaiming it from them. It would be a difficult battle, but we would fight with eachother side by side.");
                 if (Input.GetUserYN("Will you join us in battle?"))
                 {
-                    Battle.skipDefaultGenerating = true;
+                    Battlefield.skipDefaultGenerating = true;
                     DarkContent.lampOil += 25;
                     RPG.enemies.Add(new Enemy(99, "Spaghetti God", 19));
                     RPG.enemies.Add(new DefendingEnemy(17, "Spaghettius MK.2🛡", 8, 7));
@@ -262,7 +262,7 @@ namespace RandomRPG.Campaigns
             }
             else
             {
-                Battle.skipDefaultGenerating = true;
+                Battlefield.skipDefaultGenerating = true;
                 RPG.enemies.Add(new Enemy(9, "Gremlin", 11));
                 RPG.enemies.Add(new Enemy(6, "Fruit Ninja", 6));
                 RPG.enemies.Add(new Enemy(5, "Ninja #132", 5));
@@ -390,7 +390,7 @@ namespace RandomRPG.Campaigns
                         Console.WriteLine($"{RPG.heros[0].name} took 8 dmg");
                         Thread.Sleep(100);
                     }
-                    Battle.KillDeadPlayers();
+                    Battlefield.KillDeadPlayers();
                     Input.WaitForUser();
                 }
                 else

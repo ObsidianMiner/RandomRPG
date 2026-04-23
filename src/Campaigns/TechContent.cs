@@ -150,7 +150,7 @@ namespace RandomRPG
             Console.WriteLine();
             Console.WriteLine("A mysterious cache appears in front of you.");
 
-            if (Input.GetUserYN("Do you want to approch it? (y/n)"))
+            if (Input.GetUserYN("Do you want to approch it?"))
             {
                 cacheAccsessed = true;
                 RPG.enemies.Add(new Cache(100f, "Meta Cache", 0f, new Enemy[] {
