@@ -1,8 +1,8 @@
 ﻿using RandomRPG.Entities;
 
-namespace RandomRPG
+namespace RandomRPG.Campaigns
 {
-    public static class MagicContent
+    public static class DarkContent
     {
         public static int lampOil = 15;
         public static Hero[] startingHeros = new Hero[]
@@ -14,16 +14,16 @@ namespace RandomRPG
         };
         public static Hero[] possibleHeros = new Hero[]
         {
-            new Hero(18f, "Jeff", new Move[]{new HealMove("Mysterious Water Jet", 6f, 999), new DefendMove("Hide", 5, false)}),
+            new Hero(18f, "Jeff", new Move[]{new HealMove("Mysterious Water Jet", 6f, 999), new DefendMove("Hide", 7, false)}),
             new Hero(12f, "Huntsman", new Move[]{ new StealthMove("Snipe", 13f), new UselessMove("Fall Over")}),
             new Hero(25f, "The Mugger", new Move[]{ new ConvertMove("Mug"), new UselessMove("Smug")}),
             new Hero(26f, "Batman", new Move[]{new DamageMove("Batarang", 6f), new StunningMove("Crash Batmobile into", 0f, 0.5f)}),
-            new Hero(24f, "Bungus", new Move[]{ new HealMove("Bung Others", 5f, 5), new SelfHealMove("Bung Yourself", 5f, 999) },
-                new Hero(52f, "Wungus", [new HealMove("Wung Others", 8f, 99), new StunAllMove("Spore Explosion", 1)])),
+            new Hero(24f, "Bungus", new Move[]{ new HealMove("Bung", 6f, 999), new WeakenMove("Bungal Spores")},
+                new Hero(52f, "Wungus", [new HealMove("Wung", 9f, 999), new WeakenMove("Wungal Spores"), new StunAllMove("Spore Explosion", 1)])),
             new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 20f)},
                 new Hero(8f, "Task Master", [new DamageMove("Erasure", 30f)])),
             new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SelfDamageMove("Ice Ray", 15f, 15f)}),
-            new Hero(18f, "Braken", [new WeakenMove("Stare at"), new GuiotineMove("Snap Neck", 6f)]),
+            new Hero(18f, "Braken", [new WeakenMove("Stare at"), new GuiotineMove("Snap Neck", 5f)]),
             new Hero(26f, "Loader", [new DamageMove("Bash", 6f)],
                 new Hero(36f, "True Form Loader", [new DamageMove("GRAND SLAM", 13f)])),
             new Hero(27f, "Mac", [new WeakenMove("Wave Stick"), new DamageMove("BBQ Blaster", 4f)]),
@@ -60,10 +60,11 @@ namespace RandomRPG
         public static Enemy[][] miniBossess = new Enemy[][]
         {
             new Enemy[] {
-                new Enemy(50f, "Crimson Moon!!", 12f),
-                new Enemy(12f, "Warewolf!!!!", 19f),
-                new Enemy(12f, "Warewolf!!!!", 19f),
-                new Enemy(12f, "Warewolf!!!!", 19f)
+                new Enemy(40f, "Crimson Moon!!", 12f),
+                new Enemy(14f, "Warewolf!!!!", 14f),
+                new Enemy(14f, "Warewolf!!!!", 14f),
+                new Enemy(14f, "Warewolf!!!!", 14f),
+                new Enemy(14f, "Warewolf!!!!", 14f)
             },
             new Enemy[] {
                 new Enemy(5f, "Your Shadow", 7),
@@ -98,14 +99,14 @@ namespace RandomRPG
         {
             if (RPG.turnNum > 22)
             {
-                Battle.SpawnRandomEncounter(miniBossess);
-                Battle.skipDefaultGenerating = true;
+                Battlefield.SpawnRandomEncounter(miniBossess);
+                Battlefield.skipDefaultGenerating = true;
                 return;
             }
 
             RPG.enemies.Add(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)].Clone());
             if (RPG.turnNum > 10) RPG.enemies.Add(RPG.possibleEasyEnemies[RandomUtil.Next(0, RPG.possibleEasyEnemies.Length)].Clone());
-            Battle.skipDefaultGenerating = false;
+            Battlefield.skipDefaultGenerating = false;
         }
         public static void SetupContent()
         {
@@ -117,7 +118,7 @@ namespace RandomRPG
 
             RPG.tips = tips;
 
-            RPG.recruitsTillBoss += 4;
+            RPG.recruitsTillBoss += 3;
             Console.WriteLine(new string('#', RPG.windowWidth));
             Console.WriteLine("Select a starting hero...");
             for (int i = 0; i < startingHeros.Length; i++)

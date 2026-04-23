@@ -32,7 +32,7 @@
                     }
                 }
                 Hero zuckerbot = new Hero(35f, "Zuckerbot", new Move[] { new RecoveringMove("Sign Out"), new SelfDamageMove("Self Destruct", 50f, 50f), new UselessMove("Take a Selfie") });
-                if (!Battle.PlayerHasRecoveringMove())
+                if (!Battlefield.PlayerHasRecoveringMove())
                 {
                     RPG.heros.Add(zuckerbot);
                     zuckerbot.OnSpawn();

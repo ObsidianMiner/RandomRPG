@@ -12,7 +12,7 @@
         public override void TakeDamage(float damage, bool waitToKill = false)
         {
             base.TakeDamage(damage, waitToKill);
-            if (!waitToKill) Battle.KillDeadEnemies();
+            if (!waitToKill) Battlefield.KillDeadEnemies();
         }
         public override string HPStatus()
         {

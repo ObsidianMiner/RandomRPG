@@ -140,7 +140,7 @@ namespace RandomRPG
         }
         public static void Events()
         {
-            if (RPG.turnNum < 18 && RPG.turnNum > 10 && RandomUtil.NextDouble() < 0.5f && Battle.PlayerHasRecoveringMove() && !cacheAccsessed)
+            if (RPG.turnNum < 18 && RPG.turnNum > 10 && RandomUtil.NextDouble() < 0.5f && Battlefield.PlayerHasRecoveringMove() && !cacheAccsessed)
             {
                 GenerateCache();
             }
@@ -221,7 +221,7 @@ namespace RandomRPG
         }
         public static void GenerateEnemies()
         {
-            Battle.skipDefaultGenerating = true;
+            Battlefield.skipDefaultGenerating = true;
             if (RPG.waveNum % 2 == 0)
             {
                 RecoverableEnemy enemy = TechContent.recoverableEnemies[RandomUtil.Next(0, TechContent.recoverableEnemies.Length)];
@@ -229,11 +229,11 @@ namespace RandomRPG
             }
             if (RPG.turnNum >= 18 && RandomUtil.NextDouble() < 0.7f)
             {
-                Battle.SpawnRandomEncounter(miniBossess);
+                Battlefield.SpawnRandomEncounter(miniBossess);
                 return;
             }
 
-            Battle.skipDefaultGenerating = false;
+            Battlefield.skipDefaultGenerating = false;
         }
         static void TechCampaignStartMessage()
         {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RandomRPG.Entities
+﻿namespace RandomRPG.Entities
 {
     public class Hero : Entity
     {
@@ -39,7 +33,7 @@ namespace RandomRPG.Entities
         public override void TakeDamage(float damage, bool waitToKill = false)
         {
             base.TakeDamage(damage, waitToKill);
-            if (!waitToKill) Battle.KillDeadPlayers();
+            if (!waitToKill) Battlefield.KillDeadPlayers();
         }
         public override void DoTurn()
         {
@@ -52,38 +46,25 @@ namespace RandomRPG.Entities
         }
         bool TryPickMove()
         {
-            for (int i = 0; i < moves.Length; i++)
-            {
-                Console.WriteLine($"{i}.{moves[i].name}");
-            }
-            Console.WriteLine("i.More Info");
-            string key = Console.ReadKey().KeyChar.ToString();
-            Console.WriteLine();
-            if (key == "i")
+            int selectedMove = Input.TryOptions("", moves.Select(m => m.name).ToArray(), true);
+
+            if (selectedMove == -1) return false;
+
+            const int showInfoIndex = -2;
+            if (selectedMove == showInfoIndex)
             {
                 PrintHeroDescription();
+                return false;
             }
-            if (!int.TryParse(key, out int pickedMove)) return false;
-            if (pickedMove >= 0 && pickedMove < moves.Length)
-            {
-                if (moves[pickedMove].hasTarget) return TryPickTarget(pickedMove, moves[pickedMove].heroTarget ? RPG.heros.ToEntities() : RPG.enemies.ToEntities());
-                else return moves[pickedMove].DoMove(null);
-            }
-            return false;
+            if (moves[selectedMove].hasTarget) return TryPickTarget(selectedMove, moves[selectedMove].heroTarget ? RPG.heros.ToEntities() : RPG.enemies.ToEntities());
+            else return moves[selectedMove].DoMove(null);
         }
         bool TryPickTarget(int pickedMove, List<Entity> side)
         {
-            Console.WriteLine($"Pick a target to use {moves[pickedMove].name} on");
-            for (int i = 0; i < side.Count; i++)
-            {
-                Console.WriteLine($"{i}.{side[i].name}");
-            }
-            if (!int.TryParse(Console.ReadKey().KeyChar.ToString(), out int pickedTarget)) return false;
-            if (pickedTarget >= 0 && pickedTarget < side.Count)
-            {
-                return moves[pickedMove].DoMove(side[pickedTarget]);
-            }
-            return false;
+            int selectedTarget = Input.TryOptions($"Pick a target to use {moves[pickedMove].name} on", side.Select(e => e.name).ToArray());
+            if (selectedTarget == -1) return false;
+
+            return moves[pickedMove].DoMove(side[selectedTarget]);
         }
         public void AddMove(Move move)
         {
@@ -92,10 +73,10 @@ namespace RandomRPG.Entities
         public void PrintHeroDescription()
         {
             Console.WriteLine($"{name}:");
-            Console.WriteLine($"Max HP {maxHP}");
+            Console.WriteLine($"\tMax HP {maxHP}");
             for (int i = 0; i < moves.Length; i++)
             {
-                Console.WriteLine($"{moves[i].name}: {moves[i].description}");
+                Console.WriteLine($"\t{moves[i].name}: {moves[i].description}");
             }
             Console.WriteLine();
         }
@@ -122,6 +103,10 @@ namespace RandomRPG.Entities
                 moveNames.Add(move, "JKELSAJDFLKSJD");
             }
             return false;
+        }
+        public Hero Clone()
+        {
+            return new Hero(maxHP, name, moves, upgrade);
         }
     }
 }

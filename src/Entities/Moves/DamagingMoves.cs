@@ -27,7 +27,7 @@
         }
         public override bool DoMove(Entity target)
         {
-            if (Battle.turnBattleCycleStartedOn != RPG.turnNum)
+            if (Battlefield.turnBattleCycleStartedOn != RPG.turnNum)
             {
                 Console.WriteLine("You can't sneak attack past the first turn!");
                 return false;
@@ -54,7 +54,7 @@
             {
                 RPG.enemies[i].TakeDamage(dmg, true);
             }
-            Battle.KillDeadEnemies();
+            Battlefield.KillDeadEnemies();
             return true;
         }
     }
@@ -93,7 +93,7 @@
             {
                 if (RPG.enemies[i].hp <= healthThreshhold) RPG.enemies[i].TakeDamage(9999, true);
             }
-            Battle.KillDeadEnemies();
+            Battlefield.KillDeadEnemies();
             return true;
         }
     }

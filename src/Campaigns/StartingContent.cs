@@ -1,6 +1,6 @@
 ﻿using RandomRPG.Entities;
 
-namespace RandomRPG
+namespace RandomRPG.Campaigns
 {
     public class StartingContent
     {

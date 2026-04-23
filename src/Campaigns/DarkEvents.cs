@@ -10,15 +10,14 @@ namespace RandomRPG.Campaigns
             {
                 return;
             }
-            int rand = RandomUtil.Next(0, 12);
+            int rand = RandomUtil.Next(0, 11);
             if (rand < 7) Console.WriteLine();
 
             //If lamp oil is low, guarentee events that give lamp oil.
-            if (MagicContent.lampOil <= 5)
+            if (DarkContent.lampOil <= 6)
             {
-                if (rand < 2) rand = 0;
-                else if (rand < 4) rand = 4;
-                else rand = 5;
+                if (rand < 4) rand = 0;
+                else rand = 4;
             }
 
             switch (rand)
@@ -30,21 +29,21 @@ namespace RandomRPG.Campaigns
                     BlackHoleEvent();
                     break;
                 case 2:
+                    CandyBowl();
+                    break;
                 case 3:
                     FruitPunchEvent();
                     break;
                 case 4:
-                    break;
-                case 5:
                     HouseInTheVoidEvent();
                     break;
-                case 6:
+                case 5:
                     VoidAnts();
                     break;
-                case 7:
+                case 6:
                     BuildABot();
                     break;
-                case 8:
+                case 7:
                     if (RPG.waveNum > 2) AntiSpaghettiSquadEvent();
                     break;
                 default:
@@ -55,21 +54,22 @@ namespace RandomRPG.Campaigns
         {
             Console.WriteLine("A giant ant hill is in front of you, and somehow is the only way forward.");
             Console.WriteLine("Inside is a 2 paths. One through a giant queen ant's room, and another a worker camp");
-            string option = Input.Options("Where would you like to progress", ["1", "2"], ["Queen's Room", "Worker Camp"]);
+            int option = Input.Options("Where would you like to progress", ["Queen's Room", "Worker Camp"]);
 
             Battle.skipDefaultGenerating = true;
-            if (option == "1")
+            if (option == 0)
             {
                 RPG.enemies.Add(new Enemy(45f, "Queen Ant", 10f));
                 RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
             }
             else
             {
-                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
-                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
-                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
-                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
-                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
+                RPG.enemies.Add(new Enemy(2f, "Ant Bro", 15f));
             }
         }
         public static void FruitPunchEvent()
@@ -112,7 +112,7 @@ namespace RandomRPG.Campaigns
             Console.WriteLine("One comes up to your crew");
             Input.WaitForUser();
             Console.WriteLine("We desperatly crave... fooooooood.");
-            Console.WriteLine("The figure gesters to some lamp oil behind them (12).");
+            Console.WriteLine("The figure gesters to some lamp oil behind them (20).");
             RPG.DisplayLampOil();
             if (Input.GetUserYN("Offer a sacrifice?"))
             {
@@ -134,7 +134,7 @@ namespace RandomRPG.Campaigns
                     Thread.Sleep(300);
                 }
                 Battle.KillDeadPlayers();
-                MagicContent.lampOil += 12;
+                DarkContent.lampOil += 20;
             }
             else
             {
@@ -143,6 +143,7 @@ namespace RandomRPG.Campaigns
                 RPG.enemies.Add(new Enemy(5, "Baby Spider", 1));
                 RPG.enemies.Add(new Enemy(5, "Baby Spider", 1));
                 RPG.enemies.Add(new Enemy(5, "Baby Spider", 1));
+                DarkContent.lampOil += 2;
             }
         }
         public static void HouseInTheVoidEvent()
@@ -153,7 +154,71 @@ namespace RandomRPG.Campaigns
             if (Input.GetUserYN("A man greets you at the enterance. Hey we are selling lamp oil, want some? I'll trade you for some work. (It will take 5 turns)"))
             {
                 RPG.turnNum += 5;
-                MagicContent.lampOil += 10;
+                DarkContent.lampOil += 10;
+            }
+        }
+        public static void CandyBowl()
+        {
+            Console.WriteLine("You approach a candy bowl omminously hoveirng a few inches of the ground, making a soft drone.");
+            Console.WriteLine("There is a sign that says \"take ONLY ONE\"");
+            Input.WaitForUser();
+            RPG.DisplayLampOil();
+            bool picking = true;
+            bool shouldSpawnWitch = false;
+            int timesTaken = 0;
+            while (picking)
+            {
+                string[] options = [
+                    "Gas Can (6 lamp oil)",
+                    "Box of Candies (+2 Max HP to all)",
+                    "Matching helmet set (Start next combat with 10 block)",
+                    "Leave"];
+
+                int pickedOption = Input.Options("Take something?", options);
+                switch (pickedOption)
+                {
+                    case 0:
+                        DarkContent.lampOil += 6;
+                        Console.WriteLine("You took the gas can, and got 6 lamp oil.");
+                        break;
+                    case 1:
+                        for (int i = 0; i < RPG.heros.Count; i++)
+                        {
+                            RPG.heros[i].maxHP += 2;
+                            RPG.heros[i].Heal(2);
+                        }
+                        Console.WriteLine("All heros gained 2 hp!");
+                        if (RandomUtil.Next(1) > 0.3f) Console.WriteLine($"but {RPG.heros[RPG.heros.Count - 1].name} absolutely hated the taste.");
+                        break;
+                    case 2:
+                        for (int i = 0; i < RPG.heros.Count; i++)
+                        {
+                            RPG.heros[i].defence += 10;
+                        }
+                        Console.WriteLine("The team now looks epic, and is pretty impenetrable (for a single turn)");
+                        break;
+                    default:
+                        picking = false;
+                        break;
+                }
+                timesTaken++;
+                if (picking && timesTaken > 1 && RandomUtil.NextBool(1, 3))
+                {
+                    shouldSpawnWitch = true;
+                    picking = false;
+                }
+            }
+            if (shouldSpawnWitch)
+            {
+                Messages.ColoredWriteLine("You short sighted, nitwit there are more lifes at stake than just your own!", ConsoleColor.Blue);
+                Battle.skipDefaultGenerating = true;
+                RPG.enemies.Add(new RegeneratingEnemy(65f, "The Wicked Witch of the West", 22, 20f));
+                RPG.enemies.Add(new RegeneratingEnemy(18f, "Black Cat", 2, 18f));
+            }
+            else if (timesTaken == 1)
+            {
+                Console.WriteLine("You here a raspy whisper in the distance...");
+                Messages.ColoredWriteLine("Good luck fending off the Kaleidoscope", ConsoleColor.Blue);
             }
         }
         public static void AntiSpaghettiSquadEvent()
@@ -167,7 +232,7 @@ namespace RandomRPG.Campaigns
                 if (Input.GetUserYN("Will you join us in battle?"))
                 {
                     Battle.skipDefaultGenerating = true;
-                    MagicContent.lampOil += 25;
+                    DarkContent.lampOil += 25;
                     RPG.enemies.Add(new Enemy(99, "Spaghetti God", 19));
                     RPG.enemies.Add(new DefendingEnemy(17, "Spaghettius MK.2🛡", 8, 7));
                     RPG.enemies.Add(new Enemy(26, "Meatballer", 13));
@@ -186,11 +251,11 @@ namespace RandomRPG.Campaigns
                 else
                 {
                     Console.WriteLine("We wish you best of luck on your travels.");
-                    if (MagicContent.lampOil <= 5)
+                    if (DarkContent.lampOil <= 5)
                     {
                         Console.WriteLine("Here is some lamp oil, I see you are struggling for it");
                         Console.WriteLine("Gained 5 lamp oil");
-                        MagicContent.lampOil += 5;
+                        DarkContent.lampOil += 5;
                     }
                     Input.WaitForUser();
                 }
@@ -236,8 +301,8 @@ namespace RandomRPG.Campaigns
                 Input.WaitForUser();
                 Console.WriteLine("A mechanical arm slings at you");
                 Messages.ColoredWriteLine("Would you like to build a bot today sir or madam?", ConsoleColor.Green);
-                string option = Input.Options("", ["1", "2"], ["Build a bot", "Book it"]);
-                if (option == "1")
+                int option = Input.Options(question: "", ["Build a bot", "Book it"]);
+                if (option == 0)
                 {
 
                     int health = 25;
@@ -245,16 +310,15 @@ namespace RandomRPG.Campaigns
                     Messages.ColoredWriteLine("Great!", ConsoleColor.Green);
                     Messages.ColoredWriteLine("Which ribcage would you like to use!", ConsoleColor.Green);
                     string[] ribcageOptions = ["RC Car", "Giant Ball Of Putty", "Volitile Oil Drum"];
-                    string[] optionKeys = ["1", "2", "3"];
-                    string ribcageOption = Input.Options("", optionKeys, ribcageOptions);
-                    if (ribcageOption == "1")
+                    int ribcageOptionIndex = Input.Options("", ribcageOptions);
+                    if (ribcageOptionIndex == 0)
                     {
                         health += 10;
                         moves.Add(new StunningMove("Run Over", 6, 0.5f));
                         Messages.ColoredWriteLine("Let me just make sure the batteries last long enough", ConsoleColor.Green);
                         Console.WriteLine("[Places in a AA battery]");
                     }
-                    else if (ribcageOption == "2")
+                    else if (ribcageOptionIndex == 1)
                     {
                         health += 30;
                         moves.Add(new SelfHealMove("Meld Together", 2f, 99));
@@ -267,15 +331,15 @@ namespace RandomRPG.Campaigns
                     }
 
                     Messages.ColoredWriteLine("Now for some limbs, what body is good without some limbs!", ConsoleColor.Green);
-                    Messages.ColoredWriteLine($"Which limbs would you like to add to your {ribcageOptions[Array.IndexOf(optionKeys, ribcageOption)]}?", ConsoleColor.Green);
-                    string limbOption = Input.Options("", ["1", "2", "3"], ["Razerblades", "Comic Books", "You"]);
-                    if (limbOption == "1")
+                    Messages.ColoredWriteLine($"Which limbs would you like to add to your {ribcageOptions[ribcageOptionIndex]}?", ConsoleColor.Green);
+                    int limbOptionIndex = Input.Options("", ["Razerblades", "Comic Books", "You"]);
+                    if (limbOptionIndex == 0)
                     {
                         health -= 5;
                         moves.Add(new DamageMove("Blade 'Em", 11));
                         Messages.ColoredWriteLine("Nice pick, should be able to do some REAL carnage.", ConsoleColor.Green);
                     }
-                    else if (limbOption == "2")
+                    else if (limbOptionIndex == 1)
                     {
                         health += 10;
                         moves.Add(new UselessMove("Read from your sleves"));
@@ -308,7 +372,7 @@ namespace RandomRPG.Campaigns
                     Messages.ColoredWriteLine("What would you like to name your new form!", ConsoleColor.Green);
 
                     string name = "";
-                    while (name.Trim().Length > 0)
+                    while (name.Trim().Length == 0)
                     {
                         string? nameGiven = Console.ReadLine();
                         if (nameGiven != null) name = nameGiven;

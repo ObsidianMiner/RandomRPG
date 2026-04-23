@@ -54,7 +54,7 @@
         }
         public override Enemy Clone()
         {
-            return new AdvertisementEnemy(hp, name, dmg);
+            return new AdvertisementEnemy(maxHP, name, dmg);
         }
     }
     public class RegeneratingEnemy : Enemy

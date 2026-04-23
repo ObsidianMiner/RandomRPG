@@ -1,4 +1,6 @@
-﻿using RandomRPG.Entities;
+﻿using RandomRPG.Campaigns;
+
+using RandomRPG.Entities;
 
 namespace RandomRPG
 {
@@ -39,7 +41,7 @@ namespace RandomRPG
             {
                 waveNum++;
                 RunBattle();
-                bool lampLoss = (magicCapaign && (MagicContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp")));
+                bool lampLoss = (magicCapaign && (DarkContent.lampOil < 0 || !heros.Any(h => h.name == "The Lamp")));
                 if (heros.Count == 0 || lampLoss)
                 {
                     gameRunning = false;
@@ -54,11 +56,11 @@ namespace RandomRPG
                     Messages.WinGameMessage();
                     break;
                 }
-                else Camp();
-                Battle.GenerateEnemies();
+                else Camp.VistCamp();
+                Battlefield.GenerateEnemies();
             }
         }
-        public static void DisplayLampOil() => Console.WriteLine($"💡{MagicContent.lampOil} lamp oil left...");
+        public static void DisplayLampOil() => Console.WriteLine($"💡{DarkContent.lampOil} lamp oil left...");
         public static void SpawnBoss()
         {
             Messages.BossMessage();
@@ -94,13 +96,13 @@ namespace RandomRPG
                 Messages.ColoredWriteLine($"Turn {turnNum}", ConsoleColor.Yellow);
                 if (magicCapaign)
                 {
-                    MagicContent.lampOil--;
-                    if (MagicContent.lampOil < 0) return;
+                    DarkContent.lampOil--;
+                    if (DarkContent.lampOil < 0) return;
                     DisplayLampOil();
                 }
                 for (int i = 0; i < heros.Count; i++)
                 {
-                    Battle.PrintField();
+                    Battlefield.PrintField();
                     heros[i].TryTurn();
                     if (enemies.Count == 0) return;
                 }
@@ -114,13 +116,20 @@ namespace RandomRPG
                     enemies[i].TryTurn();
                     if (heros.Count == 0) return;
                 }
+                Battlefield.KillDeadEnemies();
                 for (int i = 0; i < heros.Count; i++)
                 {
                     heros[i].defence = 0;
                 }
-                if (heros.Count == 0 || MagicContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp"))) return;
+                if (heros.Count == 0 || DarkContent.lampOil < 0 || (magicCapaign && !heros.Any(h => h.name == "The Lamp"))) return;
                 Input.WaitForUser();
             }
+        }
+        public static void RecruitHero(Hero hero)
+        {
+            RPG.heros.Add(hero);
+            hero.OnSpawn();
+            RPG.herosRecruited++;
         }
 
         static void BeginJourneyScreen()
@@ -138,136 +147,12 @@ namespace RandomRPG
                     break;
                 case 'm':
                     magicCapaign = true;
-                    MagicContent.SetupContent();
+                    DarkContent.SetupContent();
                     break;
                 default:
                     StartingContent.Setup();
                     break;
             }
-        }
-        static void Camp()
-        {
-            Messages.CampMessage();
-
-            int firstRecruit = FindNewRecruit(-1);
-            int secondRecruit = FindNewRecruit(firstRecruit);
-            int upgrade = FindUpgrade();
-            string upgradingCharacterName = "";
-            if (upgrade >= 0) upgradingCharacterName = heros[upgrade].name; //Used to fix reordering to change the upgrade.
-
-            bool gotAid = false;
-            while (!gotAid)
-            {
-                if (upgrade > -1) upgrade = heros.FindIndex(h => h.name == upgradingCharacterName);
-                Console.WriteLine("Wellcome back to the cozy campsite. Your heros have each healed by 10. There are recruits waiting pick one.");
-
-                Console.WriteLine(tips[Math.Min(waveNum - 1, tips.Length - 1)]);
-                Console.WriteLine("Recruits at camp:");
-                Console.WriteLine();
-                if (firstRecruit != -1)
-                {
-                    Console.Write("0.");
-                    possibleHeros[firstRecruit].PrintHeroDescription();
-                    Console.WriteLine();
-                }
-                if (secondRecruit != -1)
-                {
-                    Console.Write("1.");
-                    possibleHeros[secondRecruit].PrintHeroDescription();
-                    Console.WriteLine();
-                }
-
-
-                if (waveNum <= 3) Console.WriteLine("Upgrading Characters will be unlcoked at wave 4.");
-                else
-                {
-                    if (upgrade != -1)
-                    {
-                        Console.WriteLine("Upgrade of the day:");
-                        Console.WriteLine($"Upgrade {heros[upgrade].name} to");
-                        Console.Write("2.");
-                        heros[upgrade].upgrade.PrintHeroDescription();
-                        Console.WriteLine();
-                    }
-                }
-
-                Console.WriteLine("o.");
-                Console.WriteLine("Reorder party.");
-                Console.WriteLine();
-
-                string key = Console.ReadKey().KeyChar.ToString();
-
-                if (key == "0")
-                {
-                    RecruitHero(possibleHeros[firstRecruit]);
-                    gotAid = true;
-                }
-                else if (key == "1")
-                {
-                    RecruitHero(possibleHeros[secondRecruit]);
-                    gotAid = true;
-                }
-                else if (key == "2")
-                {
-                    heros[upgrade].Upgrade();
-                    gotAid = true;
-                }
-                else if (key == "o")
-                {
-                    ReOrderParty();
-                }
-            }
-            for (int i = 0; i < heros.Count; i++)
-            {
-                heros[i].Heal(10f);
-            }
-        }
-        public static void RecruitHero(Hero hero)
-        {
-            heros.Add(hero);
-            hero.OnSpawn();
-            herosRecruited++;
-        }
-        public static void ReOrderParty()
-        {
-            Console.WriteLine("Select each character in the order you want them");
-            List<Hero> orderedHeros = new List<Hero>();
-            while (heros.Count > 0)
-            {
-                for (int i = 0; i < heros.Count; i++)
-                {
-                    Console.WriteLine($"{i}. {heros[i].name}");
-                }
-                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int indexPicked) && indexPicked >= 0 && indexPicked < heros.Count)
-                {
-                    orderedHeros.Add(heros[indexPicked]);
-                    heros.RemoveAt(indexPicked);
-                }
-                Console.WriteLine("");
-            }
-            heros = orderedHeros;
-        }
-        static int FindNewRecruit(int alreadyInSelection)
-        {
-            int attempts = 0;
-            while (attempts < 900)
-            {
-                attempts++;
-                int recruit = RandomUtil.Next(0, possibleHeros.Length);
-                if (!possibleHeros[recruit].recruited && recruit != alreadyInSelection) return recruit;
-            }
-            return -1;
-        }
-        static int FindUpgrade()
-        {
-            int attempts = 0;
-            while (attempts < 900)
-            {
-                attempts++;
-                int upgradeable = RandomUtil.Next(0, heros.Count);
-                if (heros[upgradeable].upgrade != null) return upgradeable;
-            }
-            return -1;
         }
 
     }

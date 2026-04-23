@@ -35,7 +35,10 @@
         }
         public virtual string HPStatus()
         {
-            return $"{hp}/{maxHP}{(stunImmune ? "✱" : "") + (stuned && !stunImmune ? "*" : string.Empty)} {(defence > 0 ? "🛡 " + defence : string.Empty)}";
+            return $"{hp}/{maxHP}{(stunImmune ? "✱" : "") +
+                (stuned && !stunImmune ? "*" : string.Empty)}" +
+                $"{(defence > 0 ? " 🛡 " + defence : string.Empty)}" +
+                $"{(damageTakenMult.Evaluate() != 1f ? " 💔 " + MathF.Round(damageTakenMult.Evaluate(), 2) + "x" : "")}";
         }
         public virtual void DoTurn()
         {

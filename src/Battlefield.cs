@@ -3,7 +3,7 @@
 
 namespace RandomRPG.Entities
 {
-    public static class Battle
+    public static class Battlefield
     {
         public static int turnBattleCycleStartedOn = 1;
         public static bool skipDefaultGenerating;
@@ -64,7 +64,7 @@ namespace RandomRPG.Entities
             if (RPG.magicCapaign)
             {
                 MagicEvents.Events();
-                if (!skipDefaultGenerating) MagicContent.GenerateEnemies();
+                if (!skipDefaultGenerating) DarkContent.GenerateEnemies();
             }
 
             if (!skipDefaultGenerating)

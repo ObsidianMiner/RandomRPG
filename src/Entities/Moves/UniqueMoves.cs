@@ -1,4 +1,6 @@
-﻿namespace RandomRPG.Entities
+﻿using RandomRPG.Campaigns;
+
+namespace RandomRPG.Entities
 {
     public class GlowMove : Move
     {
@@ -11,7 +13,7 @@
         public override bool DoMove(Entity target)
         {
             owner.stuned = true;
-            MagicContent.lampOil += 2;
+            DarkContent.lampOil += 2;
             return true;
         }
     }
@@ -50,6 +52,15 @@
         }
         public override bool DoMove(Entity target)
         {
+            if (target == owner)
+            {
+                Messages.ColoredWriteLine($"You can't use this on yourself for obvious reasons! {owner.name} does not need such bugs to demolish mortals.", ConsoleColor.Red);
+                return false;
+            }
+            if (target is Hero && ((Hero)target).moves.Any(m => m is SecretTechniqueMove))
+            {
+                Messages.ColoredWriteLine($"What have you done! You have created unlimited power!", ConsoleColor.Cyan);
+            }
             if (hasDownside) owner.stuned = true;
             for (int i = 0; i < 3; i++)
             {
@@ -187,7 +198,7 @@
         {
             for (int i = 0; i < RPG.enemies.Count; i++)
             {
-                RPG.enemies[i].stuned = true;
+                if (!RPG.enemies[i].stunImmune) RPG.enemies[i].stuned = true;
             }
             return true;
         }
