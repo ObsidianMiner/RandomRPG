@@ -97,6 +97,12 @@
             }
             return false;
         }
+        public void IncreaseMaxHP(int increase)
+        {
+            hp += increase;
+            maxHP += increase;
+            if (upgrade != null) upgrade.maxHP += increase;
+        }
         public Hero Clone()
         {
             return new Hero(maxHP, name, moves, upgrade);

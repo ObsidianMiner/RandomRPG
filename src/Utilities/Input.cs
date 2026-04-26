@@ -92,7 +92,7 @@ namespace RandomRPG
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static int HeroOption(Hero[] options)
+        public static int HeroOption(IEnumerable<Hero> options)
         {
             return Options("", options.Select(h => h.name).ToArray());
         }

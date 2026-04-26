@@ -4,12 +4,12 @@
     {
         public static Enemy[] summons = new Enemy[]
         {
-            new Enemy(30f, "The IRS!!!", 13f),
-            new Enemy(25f, "Joe Biden!!", 12f),
-            new Enemy(22f, "FBI!!!", 19f),
+            new Enemy(30f, "The IRS!!!", 8f),
+            new Enemy(16f, "Joe Biden!!", 12f),
+            new Enemy(16f, "FBI!!!", 19f),
             new Enemy(35f, "Homeland Security!!!!", 20f),
-            new TimeBomb(15f, "Balistic Missile💀", 9f, 2),
-            new Enemy(20f, "CIA!!!", 13f)
+            new TimeBomb(9f, "Balistic Missile💀", 9f, 2),
+            new Enemy(20f, "CIA!!!", 8f)
         };
         int turnNum;
         public Boss(float hp, string name, float dmg) : base(hp, name, dmg)

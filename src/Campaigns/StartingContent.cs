@@ -13,10 +13,10 @@ namespace RandomRPG.Campaigns
                 new Hero(40f, "Soda Samari", new Move[]{ new AllTargetsDamage("Ultra Gamer Attack", 5f), new HealMove("Healing Dew", 20f, 3)})),
             new Hero(20f, "Trunker", new Move[]{new DamageMove("Hacksaw", 6f), new AllTargetsDamage("Shotgun", 3f)}),
             new Hero(32f, "Baby Shark", new Move[]{new UselessMove("Cry")}),
-            new Hero(25f, "Bowl Of Soup", new Move[]{new HealMove("Healing Soup", 12f, 6), new DamageMove("Burn", 3f)},
+            new Hero(25f, "Bowl Of Soup", new Move[]{new HealMove("Healing Soup", 12f, 6), new DamageMove("Burn", 4f)},
                 new Hero(50f, "Hot Chili", new Move[]{new HealMove("Healing Soup", 25f, 6), new DamageMove("Bean Blast", 8f), new WeakenMove("Enflame")})),
             new Hero(28f, "Fruit Punch", new Move[]{new DamageMove("Punch", 7f)}),
-            new Hero(30f, "Minecraft Dog", new Move[]{new DamageMove("Bite", 7f), new HealMove("Feed Rotten Flesh", 5f, 64)},
+            new Hero(30f, "Minecraft Dog", new Move[]{new DamageMove("Bite", 7f), new HealMove("Feed Rotten Flesh", 6f, 64)},
                 new Hero(60f, "Dog's Ghost", new Move[]{new WeakenMove("Haunt"), new DefendMove("Bestow Luck", 4f)})),
             new Hero(20f, "Steve", new Move[]{new DamageMove("Punch", 5f)})
         };
@@ -32,11 +32,11 @@ namespace RandomRPG.Campaigns
         };
         public static Enemy[] possibleMediumEnemies = new Enemy[]
         {
-            new Enemy(21f, "Ferrari!!", 10f),
+            new Enemy(21f, "Ferrari!!", 9f),
             new Enemy(16f, "Archer #394!", 11f),
             new Enemy(32f, "The Wall", 0.5f),
-            new Enemy(19f, "Snake!!", 14f),
-            new Enemy(21f, "Asian Parents!!", 14f)
+            new Enemy(16f, "Snake!!", 14f),
+            new Enemy(21f, "Asian Parents!!", 12f)
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
@@ -69,7 +69,7 @@ namespace RandomRPG.Campaigns
             RPG.possibleHardEnemies = possibleHardEnemies;
             RPG.tips = tips;
 
-            RPG.heros.Add(new Hero(20f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], Move.basicMoveset));
+            RPG.heros.Add(new Hero(25f, possibleGenericHeroNames[RandomUtil.Next(0, possibleGenericHeroNames.Length)], Move.basicMoveset));
             RPG.heros.Add(RPG.possibleHeros[RandomUtil.Next(0, RPG.possibleHeros.Length)]);
             for (int i = 0; i < RPG.heros.Count; i++)
             {
@@ -77,7 +77,7 @@ namespace RandomRPG.Campaigns
                 RPG.heros[i].PrintHeroDescription();
             }
             RPG.enemies.Add(new Enemy(2f, "LittleBadGuy", 3f));
-            RPG.enemies.Add(new Enemy(20f, "BigBadGuy!", 6f));
+            RPG.enemies.Add(new Enemy(20f, "BigBadGuy!", 5f));
             RPG.enemies.Add(new Enemy(8f, "Theif!!", 9f));
             for (int i = 0; i < RPG.enemies.Count; i++)
             {

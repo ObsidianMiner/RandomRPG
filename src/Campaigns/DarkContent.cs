@@ -10,32 +10,34 @@ namespace RandomRPG.Campaigns
             new Hero(32, "Forest Giant", new Move[]{ new DamageMove("NOOM NOOM, TASTES GOOD", 6f)}),
             new Hero(30, "R2D2", new Move[]{ new AllTargetsDamage("Chain Zap", 3f), new DamageMove("Ram", 4f)}),
             new Hero(29, "007", new Move[]{ new StealthMove("Assasinate", 13f), new StunningMove("Drive a car into the enemy", 0f, 0.5f), new SuperStunMove("Stun Grenade")}),
-            new Hero(38, "Steel Rod", new Move[]{ new DefendMove("Block the way!", 3), new DamageMove("Drop on", 5f)})
+            new Hero(38, "Steel Rod", new Move[]{ new DefendMove("Block the way!", 4), new DamageMove("Drop on", 5f)})
         };
         public static Hero[] possibleHeros = new Hero[]
         {
-            new Hero(18f, "Jeff", new Move[]{new HealMove("Mysterious Water Jet", 6f, 999), new DefendMove("Hide", 7, false)}),
-            new Hero(12f, "Huntsman", new Move[]{ new StealthMove("Snipe", 13f), new UselessMove("Fall Over")}),
+            new Hero(18f, "Jeff", new Move[]{new HealMove("Mysterious Water Jet", 11f, 6), new DefendMove("Hide", 7, false)}),
+            new Hero(22f, "Huntsman", new Move[]{ new StealthMove("Snipe", 13f), new UselessMove("Fall Over")}),
             new Hero(25f, "The Mugger", new Move[]{ new ConvertMove("Mug"), new UselessMove("Smug")}),
             new Hero(26f, "Batman", new Move[]{new DamageMove("Batarang", 6f), new StunningMove("Crash Batmobile into", 0f, 0.5f)}),
-            new Hero(24f, "Bungus", new Move[]{ new HealMove("Bung", 6f, 999), new WeakenMove("Bungal Spores")},
+            new Hero(27f, "Bungus", new Move[]{ new HealMove("Bung", 7f, 999), new WeakenMove("Bungal Spores")},
                 new Hero(52f, "Wungus", [new HealMove("Wung", 9f, 999), new WeakenMove("Wungal Spores"), new StunAllMove("Spore Explosion", 1)])),
             new Hero(2f, "Task Manager", new Move[]{ new DamageMove("Kill Process", 20f)},
                 new Hero(8f, "Task Master", [new DamageMove("Erasure", 30f)])),
-            new Hero(24f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new DefendMove("Dodge", 10f, false), new SelfDamageMove("Ice Ray", 15f, 15f)}),
+            new Hero(26f, "Frozone", new Move[]{ new StunningMove("Ice Spray", 3f, 0.6f), new TargetedDefendMove("Protect", 10f), new SelfDamageMove("Ice Ray", 15f, 15f)}),
             new Hero(18f, "Braken", [new WeakenMove("Stare at"), new GuiotineMove("Snap Neck", 5f)]),
             new Hero(26f, "Loader", [new DamageMove("Bash", 6f)],
                 new Hero(36f, "True Form Loader", [new DamageMove("GRAND SLAM", 13f)])),
             new Hero(27f, "Mac", [new WeakenMove("Wave Stick"), new DamageMove("BBQ Blaster", 4f)]),
-        };
+            new Hero(29f, "Poe", [new AllTargetsDamage("Go Crazy", 3f), new DefendMove("Man's best friend", 5), new UselessMove("Run from the kids")],
+                new Hero(45f, "Starlord Poe", [new AllTargetsDamage("Shoot kids", 5f), new DefendMove("Man's best friend", 5), new WeakenMove("Heatwave")]))
+    };
         public static Enemy[] possibleEasyEnemies = new Enemy[]
         {
-            new Enemy(3f, "Bedbugs", 5),
-            new Enemy(7f, "Plug Snake", 4),
-            new Enemy(5f, "Your Shadow", 7),
+            new Enemy(3f, "Bedbugs", 4),
+            new Enemy(7f, "Plug Snake", 3),
+            new Enemy(5f, "Your Shadow", 6),
             new DefendingEnemy(3f, "Cobweb🛡", 0, 2),
-            new Enemy(6f, "Pillbug", 5),
-            new Enemy(2, "Bad Breath", 12f)
+            new Enemy(6f, "Pillbug", 4),
+            new Enemy(2, "Bad Breath", 11f)
         };
         public static Enemy[] possibleMediumEnemies = new Enemy[]
         {
@@ -47,7 +49,7 @@ namespace RandomRPG.Campaigns
             new Enemy(25f, "Hank Hill", 8f),
             new Enemy(21f, "Woody", 9f),
             new Enemy(13f, "Paralysis Demon", 19f),
-            new Enemy(19f, "Fireball Mage", 16f)
+            new Enemy(19f, "Fireball Mage", 15)
         };
         public static Enemy[] possibleHardEnemies = new Enemy[]
         {
@@ -64,25 +66,29 @@ namespace RandomRPG.Campaigns
                 new Enemy(14f, "Warewolf!!!!", 14f),
                 new Enemy(14f, "Warewolf!!!!", 14f),
                 new Enemy(14f, "Warewolf!!!!", 14f),
+                new Enemy(14f, "Warewolf!!!!", 14f),
                 new Enemy(14f, "Warewolf!!!!", 14f)
             },
             new Enemy[] {
                 new Enemy(5f, "Your Shadow", 7),
-                new Enemy(26, "Imp", 8),
-                new AdvertisementEnemy(30f, "Advertisement", 2),
-                new RegeneratingEnemy(24f, "Slime", 6, 5),
+                new Enemy(26, "Imp", 15),
+                new AdvertisementEnemy(30f, "Advertisement", 3),
+                new RegeneratingEnemy(24f, "Slime", 6, 7),
+                new Enemy(80, "Malwrath", 14),
                 new Enemy(45, "Sentiant Flying Sword", 19)
             },
             new Enemy[]
             {
-                new Enemy(14f, "Tar Slime", 7f),
-                new RegeneratingEnemy(45f, "Clay Dunestrider", 18f, 19),
-                new Enemy(14f, "Tar Slime", 7f)
+                new Enemy(16f, "Tar Slime", 7f),
+                new Enemy(16f, "Tar Slime", 7f),
+                new RegeneratingEnemy(55f, "Clay Dunestrider", 20f, 20f),
+                new Enemy(16f, "Tar Slime", 7f),
+                new Enemy(16f, "Tar Slime", 7f)
             },
             new Enemy[]
             {
                 new Enemy(28f, "Anxiety", 16),
-                new DefendingEnemy(23f, "Guilt🛡", 15, 3),
+                new DefendingEnemy(23f, "Guilt🛡", 3, 6),
                 new Enemy(35f, "Despair", 9),
                 new Enemy(26f, "Heartache", 9)
             }
@@ -121,7 +127,7 @@ namespace RandomRPG.Campaigns
 
             RPG.tips = tips;
 
-            RPG.recruitsTillBoss += 3;
+            RPG.recruitsTillBoss += 2;
             Console.WriteLine(new string('#', RPG.windowWidth));
             Console.WriteLine("Select a starting hero...");
             for (int i = 0; i < startingHeros.Length; i++)
@@ -129,7 +135,7 @@ namespace RandomRPG.Campaigns
                 startingHeros[i].PrintHeroDescription();
             }
             RPG.heros.Add(startingHeros[Input.HeroOption(startingHeros)]);
-            RPG.heros.Add(new Hero(30f, "The Lamp", new Move[] { new DamageMove("Smack", 6f) }));
+            RPG.heros.Add(new Hero(35f, "The Lamp", new Move[] { new DamageMove("Smack", 6f) }));
 
             Console.WriteLine("The darkness is encroching in, whispering all around you...");
             Console.WriteLine("Keep the latern alive, and don't let it run out of oil!");

@@ -87,15 +87,10 @@ namespace RandomRPG
             List<Hero> orderedHeros = new List<Hero>();
             while (RPG.heros.Count > 0)
             {
-                for (int i = 0; i < RPG.heros.Count; i++)
-                {
-                    Console.WriteLine($"{i}. {RPG.heros[i].name}");
-                }
-                if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out int indexPicked) && indexPicked >= 0 && indexPicked < RPG.heros.Count)
-                {
-                    orderedHeros.Add(RPG.heros[indexPicked]);
-                    RPG.heros.RemoveAt(indexPicked);
-                }
+                int indexPicked = Input.HeroOption(RPG.heros);
+
+                orderedHeros.Add(RPG.heros[indexPicked]);
+                RPG.heros.RemoveAt(indexPicked);
                 Console.WriteLine("");
             }
             RPG.heros = orderedHeros;

@@ -55,7 +55,6 @@ namespace RandomRPG.Entities
         public static void GenerateEnemies()
         {
             skipDefaultGenerating = false;
-            turnBattleCycleStartedOn = RPG.turnNum + 1;
             if (RPG.techCampaign)
             {
                 TechContent.Events();
@@ -74,8 +73,8 @@ namespace RandomRPG.Entities
                 RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
 
 
-                //Sometimes spawn an additional enemy past turn 6
-                if (RandomUtil.NextDouble() < 0.5f && RPG.turnNum > 6) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+                //Sometimes spawn an additional enemy past turn 8
+                if (RandomUtil.NextDouble() < 0.5f && RPG.turnNum > 8) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
 
                 if (RandomUtil.NextDouble() < 0.5f)
                 {
@@ -100,9 +99,9 @@ namespace RandomRPG.Entities
                     //Hard enemies
 
                     //If too early with some variance spawn an extra medium enemy
-                    if (RPG.turnNum < (RPG.techCampaign || RPG.magicCapaign ? 17 : 25) + RandomUtil.Next(-6, 7)) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
+                    if (RPG.turnNum < (RPG.techCampaign || RPG.magicCapaign ? 17 : 25) + RandomUtil.Next(-4, 5)) RPG.enemies.Add(RPG.possibleMediumEnemies[RandomUtil.Next(0, RPG.possibleMediumEnemies.Length)].Clone());
                     //Then attempt to spawn a hard enemy, or if it rolls even higher, spawn 2.
-                    else if (RPG.turnNum < (RPG.techCampaign | RPG.magicCapaign ? 20 : 30) + RandomUtil.Next(-6, 13)) RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
+                    else if (RPG.turnNum < (RPG.techCampaign | RPG.magicCapaign ? 20 : 30) + RandomUtil.Next(-4, 8)) RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
                     else
                     {
                         RPG.enemies.Add(RPG.possibleHardEnemies[RandomUtil.Next(0, RPG.possibleHardEnemies.Length)].Clone());
@@ -116,6 +115,7 @@ namespace RandomRPG.Entities
         }
         public static void InitBattle()
         {
+            turnBattleCycleStartedOn = RPG.turnNum + 1;
             for (int i = 0; i < RPG.enemies.Count; i++)
             {
                 RPG.enemies[i].OnSpawn();

@@ -120,13 +120,22 @@ namespace RandomRPG.Entities
             if (pickedOption == "Attatch someone to the duplicating glass.")
             {
                 Console.WriteLine("Select a hero to be duplicated");
-                int heroSelectedToDuplicate = Input.HeroOption(RPG.heros.ToArray());
+                int heroSelectedToDuplicate = Input.HeroOption(RPG.heros);
                 RPG.heros.Add(RPG.heros[heroSelectedToDuplicate].Clone());
-                RPG.heros[RPG.heros.Count - 1].OnSpawn();
                 RPG.heros[RPG.heros.Count - 1].name += " 2";
+                RPG.heros[RPG.heros.Count - 1].OnSpawn();
             }
 
             if (pickedOption == "Cast the light of apotheosis to shatter the walls.")
+            {
+                for (int i = 0; i < RPG.enemies.Count; i++)
+                {
+                    RPG.enemies[i].TakeDamage(40f, true);
+                }
+                Battlefield.KillDeadEnemies();
+            }
+
+            if (pickedOption == "Do the ususal 200mph loader swing.")
             {
                 for (int i = 0; i < RPG.enemies.Count; i++)
                 {
@@ -170,6 +179,7 @@ namespace RandomRPG.Entities
                 else if (pickedOption.Contains("blue")) textColor = ConsoleColor.Blue;
                 Messages.ColoredWriteLine("It shatters to pieces", textColor);
                 damageTakenMult.AddMult(pickedOption, 1.5f);
+                lensOptionIndex++;
             }
         }
     }

@@ -1,4 +1,7 @@
-﻿namespace RandomRPG.Entities
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+
+namespace RandomRPG.Entities
 {
     public class DefendingEnemy : Enemy
     {
@@ -48,8 +51,11 @@
             base.DoTurn();
             if (!hasAdvertised)
             {
-                System.Diagnostics.Process.Start("https://noobyest.itch.io");
-                hasAdvertised = true;
+                //System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://noobyest.itch.io"));
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {"https://noobyest.itch.io"}") { CreateNoWindow = true });
+                }
             }
         }
         public override Enemy Clone()

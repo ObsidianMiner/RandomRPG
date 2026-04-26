@@ -196,10 +196,12 @@ namespace RandomRPG.Entities
         }
         public override bool DoMove(Entity target)
         {
+            if (uses <= 0) return false;
             for (int i = 0; i < RPG.enemies.Count; i++)
             {
                 if (!RPG.enemies[i].stunImmune) RPG.enemies[i].stuned = true;
             }
+            uses--;
             return true;
         }
     }

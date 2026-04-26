@@ -6,12 +6,8 @@ namespace RandomRPG.Campaigns
     {
         public static void Events()
         {
-            if (RPG.turnNum > 22)
-            {
-                return;
-            }
-            int rand = RandomUtil.Next(0, 11);
-            if (rand < 7) Console.WriteLine();
+            int rand = RandomUtil.Next(0, 14);
+            if (rand < 8) Console.WriteLine();
 
             //If lamp oil is low, guarentee events that give lamp oil.
             if (DarkContent.lampOil <= 6)
@@ -26,7 +22,7 @@ namespace RandomRPG.Campaigns
                     SpiderEvent();
                     break;
                 case 1:
-                    BlackHoleEvent();
+                    if (RandomUtil.NextBool(1, 2)) BlackHoleEvent();
                     break;
                 case 2:
                     CandyBowl();
@@ -44,7 +40,7 @@ namespace RandomRPG.Campaigns
                     BuildABot();
                     break;
                 case 7:
-                    if (RPG.waveNum > 2) AntiSpaghettiSquadEvent();
+                    if (RandomUtil.NextBool(1, 3)) AntiSpaghettiSquadEvent();
                     break;
                 default:
                     break;
@@ -59,7 +55,7 @@ namespace RandomRPG.Campaigns
             Battlefield.skipDefaultGenerating = true;
             if (option == 0)
             {
-                RPG.enemies.Add(new Enemy(45f, "Queen Ant", 10f));
+                RPG.enemies.Add(new Enemy(55f, "Queen Ant", 10f));
                 RPG.enemies.Add(new Enemy(2f, "Ant Bro", 10f));
             }
             else
@@ -79,7 +75,7 @@ namespace RandomRPG.Campaigns
             if (Input.GetUserYN("Drink it?"))
             {
                 Console.WriteLine("Who should drink it?");
-                int pickedHero = Input.HeroOption(RPG.heros.ToArray());
+                int pickedHero = Input.HeroOption(RPG.heros);
                 if (RandomUtil.NextBool(1, 3))
                 {
                     Console.WriteLine($"{RPG.heros[pickedHero].name} put their mouth to the fruit punch to drink it, but then it smacked them in the face.");
@@ -100,8 +96,7 @@ namespace RandomRPG.Campaigns
                 {
                     Console.WriteLine($"{RPG.heros[pickedHero].name} was refreshed by the fruit punch");
                     Console.WriteLine($"{RPG.heros[pickedHero].name} gained 15 Max HP");
-                    RPG.heros[pickedHero].maxHP += 15;
-                    RPG.heros[pickedHero].Heal(15);
+                    RPG.heros[pickedHero].IncreaseMaxHP(15);
                     Input.WaitForUser();
                 }
             }
@@ -116,7 +111,7 @@ namespace RandomRPG.Campaigns
             RPG.DisplayLampOil();
             if (Input.GetUserYN("Offer a sacrifice?"))
             {
-                int heroNum = Input.HeroOption(RPG.heros.ToArray());
+                int heroNum = Input.HeroOption(RPG.heros);
                 Console.WriteLine("Thank you... looks like my children will be eating well tonight");
                 while (RPG.heros[heroNum].hp > 0)
                 {
@@ -184,10 +179,9 @@ namespace RandomRPG.Campaigns
                     case 1:
                         for (int i = 0; i < RPG.heros.Count; i++)
                         {
-                            RPG.heros[i].maxHP += 2;
-                            RPG.heros[i].Heal(2);
+                            RPG.heros[i].IncreaseMaxHP(2);
                         }
-                        Console.WriteLine("All heros gained 2 hp!");
+                        Console.WriteLine("All heros gained 2 max hp!");
                         if (RandomUtil.Next(1) > 0.3f) Console.WriteLine($"but {RPG.heros[RPG.heros.Count - 1].name} absolutely hated the taste.");
                         break;
                     case 2:
@@ -234,8 +228,8 @@ namespace RandomRPG.Campaigns
                     Battlefield.skipDefaultGenerating = true;
                     DarkContent.lampOil += 25;
                     RPG.enemies.Add(new Enemy(99, "Spaghetti God", 19));
-                    RPG.enemies.Add(new DefendingEnemy(17, "Spaghettius MK.2🛡", 8, 7));
-                    RPG.enemies.Add(new Enemy(26, "Meatballer", 13));
+                    RPG.enemies.Add(new DefendingEnemy(24, "Spaghettius MK.2🛡", 8, 7));
+                    RPG.enemies.Add(new Enemy(44, "Meatballer", 13));
                     RPG.enemies.Add(new Enemy(18, "Spagettera", 14));
                     RPG.enemies.Add(new Enemy(6, "Noodler", 8));
                     RPG.enemies.Add(new Enemy(6, "Noodlest", 7));
@@ -280,8 +274,14 @@ namespace RandomRPG.Campaigns
                 {
                     if (Input.GetUserYN("Are you sure you are sure?"))
                     {
+                        for (int i = 0; i < RPG.heros.Count; i++)
+                        {
+                            RPG.heros[i].TakeDamage(3f, true);
+                        }
+                        Console.WriteLine("All heros took 3 damge");
+                        Battlefield.KillDeadPlayers();
                         RPG.heros.Add(new Hero(20f, "Black Hole", new Move[] { new GuiotineMove("Suck in", 4f) },
-                            new Hero(45f, "Destabalizing Hole", [new AllTargetsIncludingHerosDamage("Expell Radiation", 5f)],
+                            new Hero(45f, "Destabalizing Hole", [new AllTargetsIncludingHerosDamage("Expell Radiation", 11f)],
                             new Hero(100f, "Apotheosis", [new GlowMove("Glow"), new AllTargetsDamage("Blind", 9f), new HealMove("Gleam", 40f, 2), new SecretTechniqueMove("Empower", false)]))));
                         RPG.heros[RPG.heros.Count - 1].OnSpawn();
                         RPG.heros[RPG.heros.Count - 1].PrintHeroDescription();
@@ -400,9 +400,9 @@ namespace RandomRPG.Campaigns
                     Console.WriteLine($"{RPG.heros[0].name} took 2 dmg");
                     Input.WaitForUser();
                     Console.WriteLine($"{RPG.heros[0].name} seems to have triped on a fine titanium shield.");
-                    RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 4)).ToArray();
+                    RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 5)).ToArray();
                     RPG.heros[0].OnSpawn();
-                    Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 4 damage.");
+                    Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 5 damage.");
                     Input.WaitForUser();
                 }
             }
@@ -410,9 +410,9 @@ namespace RandomRPG.Campaigns
             {
                 Console.WriteLine($"{RPG.heros[0].name} walks away, slowly. When he notices something on the ground.");
                 Console.WriteLine($"{RPG.heros[0].name} bends down, and picks up a fine titanium shield off the ground.");
-                RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 4)).ToArray();
+                RPG.heros[0].moves = RPG.heros[0].moves.Append(new DefendMove("Titatium Shield", 5)).ToArray();
                 RPG.heros[0].OnSpawn();
-                Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 4 damage.");
+                Console.WriteLine($"{RPG.heros[0].name} gained the move titanium shield, which blocks all characters for 5 damage.");
                 Input.WaitForUser();
             }
         }

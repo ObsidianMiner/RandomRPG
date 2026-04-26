@@ -40,7 +40,7 @@
         public UselessMove(string name)
         {
             this.name = name;
-            description = "Absolutly Pointless";
+            description = "Absolutely Pointless";
             hasTarget = false;
         }
         public override bool DoMove(Entity target)
@@ -235,7 +235,7 @@
         public override bool DoMove(Entity target)
         {
             Console.WriteLine($"{name} attacked {target.name} for {target.GetDamageDelt(dmg)}");
-            Console.Write($"{name} melted through {target.name}'s defence!");
+            Console.WriteLine($"{name} melted through {target.name}'s defence!");
             target.TakeDamage(dmg);
             target.defence = 0f;
             return true;
